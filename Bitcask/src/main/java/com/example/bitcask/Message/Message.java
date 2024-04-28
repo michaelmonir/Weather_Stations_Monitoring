@@ -2,6 +2,8 @@ package com.example.bitcask.Message;
 
 public class Message {
 
+    public static final int MESSAGE_SIZE = 38;
+
     private Long station_id;
     private Long s_no;
     private short battery_status; // low: 0, medium: 1, high: 2
