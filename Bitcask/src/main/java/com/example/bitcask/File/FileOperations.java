@@ -7,36 +7,17 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-@Service
 public class FileOperations {
 
-    String fileName = "log.bin";
-    private FileOutputStream fileOutputStream;
-    private FileInputStream fileInputStream;
-    private int offset = 0;
-
-    public FileOperations() {
-        try {
-            this.fileOutputStream = new FileOutputStream(this.fileName);
-            this.fileInputStream = new FileInputStream(this.fileName);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public int writeToFileAndGetOffset(byte[] data) {
+    public static int writeToFile(FileOutputStream fileOutputStream, byte[] data) {
         try {
             fileOutputStream.write(data);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        int ret = offset;
-        offset += Message.MESSAGE_SIZE;
-        return ret;
     }
 
-    public byte[] readFromFile(int offset) {
+    public static byte[] readFromFile(FileInputStream fileInputStream, int offset) {
         try {
             byte[] data = new byte[Message.MESSAGE_SIZE];
             fileInputStream.read(data, offset, Message.MESSAGE_SIZE);
@@ -47,9 +28,10 @@ public class FileOperations {
         }
     }
 
-    public void closeFile() {
+    public static void closeFile(FileOutputStream fileOutputStream, FileInputStream fileInputStream) {
         try {
-            this.fileOutputStream.close();
+            fileOutputStream.close();
+            fileInputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
