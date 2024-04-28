@@ -1,5 +1,8 @@
 package com.example.bitcask.Message;
 
+import lombok.Data;
+
+@Data
 public class Message {
 
     public static final int MESSAGE_SIZE = 38;

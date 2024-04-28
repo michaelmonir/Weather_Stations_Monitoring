@@ -39,7 +39,7 @@ public class ByteToMessageConverter {
         return value;
     }
 
-    private long readShort() {
+    private short readShort() {
         short value = 0;
         for (int i = 0; i < 2; i++) {
             value = (short)((value << 8) | (bytes[index++] & 0xFF));

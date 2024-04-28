@@ -1,13 +1,12 @@
 package com.example.bitcask.Bitcask;
 
+import com.example.bitcask.Message.Message;
 import org.springframework.stereotype.Service;
 
 @Service
 public class BitcaskWriter {
 
-    private String filename;
+    public void write(Message message) {
 
-    private BitcaskWriter() {
-        filename = "mic";
     }
 }
