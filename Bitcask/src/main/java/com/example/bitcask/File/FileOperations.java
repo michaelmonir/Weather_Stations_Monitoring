@@ -13,7 +13,7 @@ public class FileOperations {
     String fileName = "log.bin";
     private FileOutputStream fileOutputStream;
     private FileInputStream fileInputStream;
-    private Long offset = 0L;
+    private int offset = 0;
 
     public FileOperations() {
         try {
@@ -24,14 +24,14 @@ public class FileOperations {
         }
     }
 
-    public Long writeToFileAndGetOffset(byte[] data) {
+    public int writeToFileAndGetOffset(byte[] data) {
         try {
             fileOutputStream.write(data);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        Long ret = offset;
+        int ret = offset;
         offset += Message.MESSAGE_SIZE;
         return ret;
     }
