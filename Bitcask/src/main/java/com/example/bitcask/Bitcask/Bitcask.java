@@ -16,7 +16,7 @@ public class Bitcask {
     @Autowired
     private FileOperations fileOperations;
 
-    public void write(Message message) {
+    public synchronized void write(Message message) {
         MessageToByteConverter messageToByteConverter = new MessageToByteConverter(message);
         byte[] data = messageToByteConverter.convert();
         int offset = fileOperations.writeToFileAndGetOffset(data);
