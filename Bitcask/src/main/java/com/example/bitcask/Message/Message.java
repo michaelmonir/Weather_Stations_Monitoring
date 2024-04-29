@@ -24,4 +24,17 @@ public class Message {
         this.temperature = temperature;
         this.wind_speed = wind_speed;
     }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "station_id=" + station_id +
+                ", s_no=" + s_no +
+                ", battery_status=" + battery_status +
+                ", status_timestamp=" + status_timestamp +
+                ", humidity=" + humidity +
+                ", temperature=" + temperature +
+                ", wind_speed=" + wind_speed +
+                '}';
+    }
 }
