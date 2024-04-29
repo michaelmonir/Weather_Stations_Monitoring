@@ -2,21 +2,25 @@ package com.example.bitcask.Segments;
 
 import com.example.bitcask.File.FileOperations;
 import com.example.bitcask.Message.Message;
+import lombok.Getter;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class SegmentOperations {
+public class Segment {
 
-    private String fileName;
+    private int fileIndex;
     private FileInputStream fileInputStream;
     private FileOutputStream fileOutputStream;
-    private int offset;
+    @Getter
+    private int size;
 
-    public SegmentOperations(String fileName) {
-        this.offset = offset;
-        this.fileName = fileName;
+    public Segment(int fileIndex) {
+        this.size = 0;
+        this.fileIndex = fileIndex;
+        String fileName = getFileNameFromIndex();
+
         try {
             fileOutputStream = new FileOutputStream(fileName);
             fileInputStream = new FileInputStream(fileName);
@@ -28,12 +32,16 @@ public class SegmentOperations {
     public int writeToFileAndGetOffset(byte[] data) {
         FileOperations.writeToFile(fileOutputStream, data);
 
-        int ret = offset;
-        offset += Message.MESSAGE_SIZE;
+        int ret = size;
+        size += Message.MESSAGE_SIZE;
         return ret;
     }
 
     public byte[] readFromFile(int offset) {
         return FileOperations.readFromFile(fileInputStream, offset);
+    }
+
+    private String getFileNameFromIndex() {
+        return Integer.toString(this.fileIndex);
     }
 }
