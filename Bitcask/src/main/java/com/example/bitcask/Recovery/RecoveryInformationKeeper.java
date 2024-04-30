@@ -1,12 +1,12 @@
 package com.example.bitcask.Recovery;
 
 import com.example.bitcask.Bitcask.Bitcask;
+import com.example.bitcask.Bitcask.SegmentIncreamenter;
 import com.example.bitcask.Exceptions.FileException;
 import com.example.bitcask.File.TextFileOperations;
 import com.example.bitcask.Segments.Segment;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,6 +24,7 @@ public class RecoveryInformationKeeper {
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
             List<Segment> segments = this.getSegments(reader);
 
+            SegmentIncreamenter.recover(segments);
             return new Bitcask(segments);
         } catch (IOException e) {
             throw new FileException();

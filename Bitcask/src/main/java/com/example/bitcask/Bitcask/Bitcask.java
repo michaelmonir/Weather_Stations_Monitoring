@@ -17,19 +17,16 @@ public class Bitcask {
     private Segment segment;
     @Getter
     private List<Segment> segments;
-    private int numOfSegments;
 
     public Bitcask() {
-        numOfSegments = 1;
         segments = new ArrayList<>();
-        segment = new Segment(numOfSegments);
+        segment = new Segment(SegmentIncreamenter.getAndIncreament());
         segments.add(segment);
     }
 
     public Bitcask(List<Segment> segments) {
         this.segments = segments;
         this.segment = segments.get(segments.size() - 1);
-        this.numOfSegments = segments.size();
     }
 
     public static Bitcask getBitcask() {
@@ -69,10 +66,12 @@ public class Bitcask {
 
     private void handleExceedingMaxSize() {
         if (this.segment.getSize() >= maxSegmentSize) {
-            segment = new Segment(numOfSegments);
+            int segmentIndex = SegmentIncreamenter.getAndIncreament();
+
+            segment = new Segment(segmentIndex);
             RecoveryInformationUpdater recoveryInformationUpdater = new RecoveryInformationUpdater();
-            recoveryInformationUpdater.addSegment(numOfSegments);
-            numOfSegments++;
+            recoveryInformationUpdater.addSegment(segmentIndex);
+
             segments.add(segment);
         }
     }

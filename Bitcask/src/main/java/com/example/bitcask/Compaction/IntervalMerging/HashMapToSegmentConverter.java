@@ -10,9 +10,9 @@ import java.util.Map;
 public class HashMapToSegmentConverter {
 
     private Segment segment;
-    private HashMap<String, String> map;
+    private HashMap<Long, Integer> map;
 
-    public HashMapToSegmentConverter(HashMap<String, String> hashMap) {
+    public HashMapToSegmentConverter(HashMap<Long, Integer> hashMap) {
         this.map = hashMap;
         this.segment = new Segment(SegmentIncreamenter.getAndIncreament());
     }
@@ -21,8 +21,8 @@ public class HashMapToSegmentConverter {
         map.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue())
                 .forEach(entry -> {
-                    System.out.println(entry.getKey() + " " + entry.getValue());
-                    segment.writeToFileAndGetOffset(entry.getKey().getBytes());
+
+                    segment.writeToFileAndGetOffset(entry.getKey());
                 });
         return segment;
     }
