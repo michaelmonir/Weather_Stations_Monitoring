@@ -6,5 +6,5 @@ import com.example.bitcask.Segments.Segment;
 import java.util.HashMap;
 
 public interface IntervalMergerStrategy {
-    HashMap<Long, Integer> mergeInterval(SegmentsWrapper segmentsWrapper, Interval interval);
+    Segment mergeInterval(SegmentsWrapper segmentsWrapper, Interval interval);
 }

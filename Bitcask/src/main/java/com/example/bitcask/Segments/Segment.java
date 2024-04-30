@@ -12,6 +12,7 @@ import java.util.Iterator;
 public class Segment {
 
     private String fileName;
+    @Getter
     private HashMap<Long, Integer> map;
     @Getter
     private int size;
@@ -30,10 +31,6 @@ public class Segment {
 
     public int getSegmentIndex() {
         return Integer.parseInt(this.fileName);
-    }
-
-    public Iterator<HashMap.Entry<Long, Integer>> getIterator() {
-        return map.entrySet().iterator();
     }
 
     public int writeToFileAndGetOffset(byte[] data) {

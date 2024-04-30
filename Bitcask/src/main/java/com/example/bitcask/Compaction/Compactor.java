@@ -1,14 +1,12 @@
 package com.example.bitcask.Compaction;
 
 import com.example.bitcask.Bitcask.Bitcask;
-import com.example.bitcask.Compaction.IntervalMerging.HashMapToSegmentConverter;
 import com.example.bitcask.Compaction.IntervalMerging.IntervalMergerStrategy;
 import com.example.bitcask.Compaction.IntervalMerging.SegmentsWrapper;
 import com.example.bitcask.File.TextFileAtmoicUpdator;
 import com.example.bitcask.Segments.Segment;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class Compactor {
@@ -43,10 +41,7 @@ public class Compactor {
             if (interval.end == sz-1) { // we don't compact the last segment
                 newSegmentsList.add(segmentList.get(interval.end));
             } else {
-                HashMap hashMap = intervalMergerStrategy.mergeInterval(new SegmentsWrapper(this.segmentList), interval);
-                HashMapToSegmentConverter hashMapToSegmentConverter = new HashMapToSegmentConverter(hashMap);
-
-                Segment newSegment = hashMapToSegmentConverter.convert();
+                Segment newSegment = intervalMergerStrategy.mergeInterval(new SegmentsWrapper(this.segmentList), interval);
                 newSegmentsList.add(newSegment);
             }
         }
