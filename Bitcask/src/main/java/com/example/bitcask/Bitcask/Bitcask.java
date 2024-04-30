@@ -13,7 +13,7 @@ import java.util.List;
 public class Bitcask {
 
     private static Bitcask simgletonBitcask;
-    private final int maxSegmentSize = 1000000000;
+    private final int maxSegmentSize = 100;
     private Segment segment;
     @Getter
     private List<Segment> segments;

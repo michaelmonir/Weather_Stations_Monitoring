@@ -3,7 +3,7 @@ package com.example.bitcask.Compaction.IntervalMerging;
 import com.example.bitcask.Compaction.Interval;
 import com.example.bitcask.Segments.Segment;
 
-public class IntervalMergerStrategyImpl implements IntervalMergerStrategy {
+public class IntervalMergerStrategySimpleImpl implements IntervalMergerStrategy {
 
     @Override
     public Segment mergeInterval(SegmentsWrapper segmentsWrapper, Interval interval) {

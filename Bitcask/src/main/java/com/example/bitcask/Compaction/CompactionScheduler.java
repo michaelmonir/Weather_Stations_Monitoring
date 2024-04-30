@@ -1,7 +1,7 @@
 package com.example.bitcask.Compaction;
 
 import com.example.bitcask.Bitcask.Bitcask;
-import com.example.bitcask.Compaction.IntervalMerging.IntervalMergerStrategyImpl;
+import com.example.bitcask.Compaction.IntervalMerging.IntervalMergerStrategySimpleImpl;
 import com.example.bitcask.Exceptions.UnkownErrorException;
 
 public class CompactionScheduler implements Runnable {
@@ -14,7 +14,7 @@ public class CompactionScheduler implements Runnable {
             } catch (InterruptedException e) {
                 throw new UnkownErrorException();
             }
-            Compactor compactor = new Compactor(new CompactionStrategyImpl(), new IntervalMergerStrategyImpl());
+            Compactor compactor = new Compactor(new CompactionStrategyImpl(), new IntervalMergerStrategySimpleImpl());
             compactor.compact();
             Bitcask bitcask = Bitcask.getBitcask();
             int z = 0;
