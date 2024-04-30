@@ -26,6 +26,8 @@ public class BitcaskApplication {
 		Compactor compactor = new Compactor(new CompactionStrategyImpl(), new IntervalMergerStrategyImpl());
 		compactor.compact();
 
+		Bitcask bitcask = Bitcask.getBitcask();
+
 		int z = 0;
 		z++;
 //		for (int i = 1; i <= 20; i++) {

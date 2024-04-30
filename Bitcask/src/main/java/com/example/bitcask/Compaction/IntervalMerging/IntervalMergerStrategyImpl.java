@@ -3,9 +3,6 @@ package com.example.bitcask.Compaction.IntervalMerging;
 import com.example.bitcask.Compaction.Interval;
 import com.example.bitcask.Segments.Segment;
 
-import java.util.HashMap;
-import java.util.Iterator;
-
 public class IntervalMergerStrategyImpl implements IntervalMergerStrategy {
 
     @Override
