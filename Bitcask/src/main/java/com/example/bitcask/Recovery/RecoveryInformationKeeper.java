@@ -22,8 +22,7 @@ public class RecoveryInformationKeeper {
 
         try {
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
-            int numOfFiles = Integer.parseInt(reader.readLine());
-            List<Segment> segments = this.getSegments(numOfFiles, reader);
+            List<Segment> segments = this.getSegments(reader);
 
             return new Bitcask(segments);
         } catch (IOException e) {
@@ -31,15 +30,18 @@ public class RecoveryInformationKeeper {
         }
     }
 
-    private List<Segment> getSegments(int numOfFiles, BufferedReader reader) throws IOException {
+    private List<Segment> getSegments(BufferedReader reader) throws IOException {
         List<Segment> segments = new ArrayList<>();
-        for (int i = 0; i < numOfFiles; i++) {
-            int fileIndex = Integer.parseInt(reader.readLine());
+        String line;
+        while ((line = reader.readLine()) != null) {
+            int fileIndex = Integer.parseInt(line);
             SegmentRecovery segmentRecovery = new SegmentRecovery(fileIndex);
             Segment segment = segmentRecovery.recover();
             segments.add(segment);
         }
-        if (numOfFiles == 0) segments.add(new Segment(1));
+        if (segments.isEmpty()) {
+            segments.add(new Segment(1));
+        }
         return segments;
     }
 }
