@@ -1,6 +1,7 @@
 package com.example.bitcask.Segments;
 
-import com.example.bitcask.File.FileOperations;
+import com.example.bitcask.File.BinaryFileOperations;
+import com.example.bitcask.File.FileNameGetter;
 import com.example.bitcask.Message.ByteToMessageConverter;
 import com.example.bitcask.Message.Message;
 import lombok.Getter;
@@ -16,12 +17,18 @@ public class Segment {
 
     public Segment(int fileIndex) {
         this.size = 0;
-        fileName = getFileNameFromIndex(fileIndex);
+        fileName = FileNameGetter.getFileName(fileIndex);
         this.map = new HashMap<>();
     }
 
+    public Segment(String fileName, HashMap<Long, Integer> map, int size) {
+        this.fileName = fileName;
+        this.map = map;
+        this.size = size;
+    }
+
     public int writeToFileAndGetOffset(byte[] data) {
-        FileOperations.writeToFile(this.fileName, data);
+        BinaryFileOperations.writeToFile(this.fileName, data);
 
         int ret = size;
         size += Message.MESSAGE_SIZE;
@@ -39,13 +46,9 @@ public class Segment {
 
     public Message read(Long stationId) {
         int offset = map.get(stationId);
-        byte[] data = FileOperations.readFromFile(this.fileName, offset);
+        byte[] data = BinaryFileOperations.readFromFile(this.fileName, offset);
 
         ByteToMessageConverter byteToMessageConverter = new ByteToMessageConverter(data);
         return byteToMessageConverter.convert();
-    }
-
-    private String getFileNameFromIndex(int fileIndex) {
-        return Integer.toString(fileIndex);
     }
 }

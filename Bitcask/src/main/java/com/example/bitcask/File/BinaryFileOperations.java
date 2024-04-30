@@ -7,7 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class FileOperations {
+public class BinaryFileOperations {
 
     public static void writeToFile(String fileName, byte[] data) {
         try {
@@ -30,7 +30,18 @@ public class FileOperations {
         }
     }
 
-    private static FileInputStream getFileInputStream(String fileName) {
+    public static byte[] readFromFile(FileInputStream fileInputStream) {
+        try {
+            byte[] data = new byte[Message.MESSAGE_SIZE];
+            int numOfReadBytes = fileInputStream.read(data, 0, Message.MESSAGE_SIZE);
+            handleInsufficientBytesRead(numOfReadBytes);
+            return data;
+        } catch (IOException e) {
+            throw new FileException();
+        }
+    }
+
+    public static FileInputStream getFileInputStream(String fileName) {
         try {
             return new FileInputStream(fileName);
         } catch (IOException e) {
@@ -38,10 +49,16 @@ public class FileOperations {
         }
     }
 
-    private static FileOutputStream getFileOutputStream(String fileName, boolean append) {
+    public static FileOutputStream getFileOutputStream(String fileName, boolean append) {
         try {
             return new FileOutputStream(fileName, append);
         } catch (IOException e) {
+            throw new FileException();
+        }
+    }
+
+    private static void handleInsufficientBytesRead(int numOfReadBytes) {
+        if (numOfReadBytes == -1) {
             throw new FileException();
         }
     }
