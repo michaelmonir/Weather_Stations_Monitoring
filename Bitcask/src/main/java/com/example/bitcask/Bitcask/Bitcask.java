@@ -23,6 +23,12 @@ public class Bitcask {
         segments.add(segment);
     }
 
+    public Bitcask(List<Segment> segments) {
+        this.segments = segments;
+        this.segment = segments.get(segments.size() - 1);
+        this.numOfSegments = segments.size();
+    }
+
     public void write(Message message) {
         MessageToByteConverter messageToByteConverter = new MessageToByteConverter(message);
         byte[] data = messageToByteConverter.convert();

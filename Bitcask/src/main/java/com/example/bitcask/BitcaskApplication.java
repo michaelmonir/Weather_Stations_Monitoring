@@ -17,10 +17,10 @@ public class BitcaskApplication {
 		RecoveryInformationKeeper recoveryInformationKeeper = new RecoveryInformationKeeper();
 		bitcask = recoveryInformationKeeper.recover();
 
-		for (long i = 1; i <= 20; i++) {
-			Message message = new Message(i, i, (short)i, i, (int)i, (int)i, (int)i);
-			bitcask.write(message);
-		}
+//		for (long i = 1; i <= 20; i++) {
+//			Message message = new Message(i, i, (short)i, i, (int)i, (int)i, (int)i);
+//			bitcask.write(message);
+//		}
 		for (int i = 1; i <= 20; i++) {
 			Message message = bitcask.read((long)i);
 			System.out.println(message.toString());

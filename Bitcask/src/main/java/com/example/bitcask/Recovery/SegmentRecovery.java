@@ -38,8 +38,8 @@ public class SegmentRecovery {
                 break;
             }
             long stationId = getStationIdFromByteArray(data);
-            size += Message.MESSAGE_SIZE;
             map.put(stationId, size);
+            size += Message.MESSAGE_SIZE;
         }
     }
 
