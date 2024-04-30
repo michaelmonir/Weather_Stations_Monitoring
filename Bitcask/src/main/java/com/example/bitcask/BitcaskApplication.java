@@ -15,10 +15,10 @@ public class BitcaskApplication {
 		RecoveryInformationKeeper recoveryInformationKeeper = new RecoveryInformationKeeper();
 		Bitcask.setBitcask(recoveryInformationKeeper.recover());
 
-//		for (long i = 1; i <= 21; i++) {
-//			Message message = new Message(i, i, (short)i, i, (int)i, (int)i, (int)i);
-//			Bitcask.getBitcask().write(message);
-//		}
+		for (long i = 1; i <= 21; i++) {
+			Message message = new Message(i, i, (short)i, i, (int)i, (int)i, (int)i);
+			Bitcask.getBitcask().write(message);
+		}
 		for (int i = 1; i <= 20; i++) {
 			Message message = Bitcask.getBitcask().read((long)i);
 			System.out.println(message.toString());
