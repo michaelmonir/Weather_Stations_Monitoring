@@ -5,36 +5,23 @@ import com.example.bitcask.Message.ByteToMessageConverter;
 import com.example.bitcask.Message.Message;
 import lombok.Getter;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.HashMap;
 
 public class Segment {
 
-    private int fileIndex;
+    private String fileName;
     private HashMap<Long, Integer> map;
-    private FileInputStream fileInputStream;
-    private FileOutputStream fileOutputStream;
     @Getter
     private int size;
 
     public Segment(int fileIndex) {
         this.size = 0;
-        this.fileIndex = fileIndex;
-        String fileName = getFileNameFromIndex();
+        fileName = getFileNameFromIndex(fileIndex);
         this.map = new HashMap<>();
-
-        try {
-            fileOutputStream = new FileOutputStream(fileName);
-            fileInputStream = new FileInputStream(fileName);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public int writeToFileAndGetOffset(byte[] data) {
-        FileOperations.writeToFile(fileOutputStream, data);
+        FileOperations.writeToFile(this.fileName, data);
 
         int ret = size;
         size += Message.MESSAGE_SIZE;
@@ -52,13 +39,13 @@ public class Segment {
 
     public Message read(Long stationId) {
         int offset = map.get(stationId);
-        byte[] data = FileOperations.readFromFile(fileInputStream, offset);
+        byte[] data = FileOperations.readFromFile(this.fileName, offset);
 
         ByteToMessageConverter byteToMessageConverter = new ByteToMessageConverter(data);
         return byteToMessageConverter.convert();
     }
 
-    private String getFileNameFromIndex() {
-        return Integer.toString(this.fileIndex);
+    private String getFileNameFromIndex(int fileIndex) {
+        return Integer.toString(fileIndex);
     }
 }

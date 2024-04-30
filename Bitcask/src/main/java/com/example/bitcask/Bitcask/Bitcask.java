@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Bitcask {
 
-    private final int maxSegmentSize = 3;
+    private final int maxSegmentSize = 200;
     private Segment segment;
     private List<Segment> segments;
     private int numOfSegments;
