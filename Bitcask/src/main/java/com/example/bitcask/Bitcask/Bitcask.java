@@ -5,6 +5,7 @@ import com.example.bitcask.Message.Message;
 import com.example.bitcask.Message.MessageToByteConverter;
 import com.example.bitcask.Recovery.RecoveryInformationUpdater;
 import com.example.bitcask.Segments.Segment;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ public class Bitcask {
     private static Bitcask simgletonBitcask;
     private final int maxSegmentSize = 200;
     private Segment segment;
+    @Getter
     private List<Segment> segments;
     private int numOfSegments;
 

@@ -7,6 +7,7 @@ import com.example.bitcask.Message.Message;
 import lombok.Getter;
 
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class Segment {
 
@@ -25,6 +26,14 @@ public class Segment {
         this.fileName = fileName;
         this.map = map;
         this.size = size;
+    }
+
+    public int getSegmentIndex() {
+        return Integer.parseInt(this.fileName);
+    }
+
+    public Iterator<HashMap.Entry<Long, Integer>> getIterator() {
+        return map.entrySet().iterator();
     }
 
     public int writeToFileAndGetOffset(byte[] data) {
