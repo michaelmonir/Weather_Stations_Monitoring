@@ -1,7 +1,8 @@
 package com.example.bitcask.Recovery;
 
 import com.example.bitcask.Bitcask.Bitcask;
-import com.example.bitcask.Bitcask.FileException;
+import com.example.bitcask.Exceptions.FileException;
+import com.example.bitcask.File.TextFileOperations;
 import com.example.bitcask.Segments.Segment;
 
 import java.io.BufferedReader;
@@ -16,7 +17,7 @@ public class RecoveryInformationKeeper {
     private String fileName = "recoveryInformation.txt";
 
     public Bitcask recover() {
-        if (!this.fileExists(fileName))
+        if (!TextFileOperations.fileExists(fileName))
             return new Bitcask();
 
         try {
@@ -40,10 +41,5 @@ public class RecoveryInformationKeeper {
         }
         if (numOfFiles == 0) segments.add(new Segment(1));
         return segments;
-    }
-
-    private boolean fileExists(String fileName) {
-        File file = new File(fileName);
-        return file.exists();
     }
 }

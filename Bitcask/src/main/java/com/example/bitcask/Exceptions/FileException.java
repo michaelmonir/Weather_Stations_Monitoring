@@ -1,4 +1,4 @@
-package com.example.bitcask.Bitcask;
+package com.example.bitcask.Exceptions;
 
 public class FileException extends RuntimeException {
 }

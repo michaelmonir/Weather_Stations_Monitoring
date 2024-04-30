@@ -1,9 +1,9 @@
 package com.example.bitcask.Bitcask;
 
-import com.example.bitcask.Errors.NoMessageWithThisIdException;
-import com.example.bitcask.Message.ByteToMessageConverter;
+import com.example.bitcask.Exceptions.NoMessageWithThisIdException;
 import com.example.bitcask.Message.Message;
 import com.example.bitcask.Message.MessageToByteConverter;
+import com.example.bitcask.Recovery.RecoveryInformationUpdater;
 import com.example.bitcask.Segments.Segment;
 
 import java.util.ArrayList;
@@ -11,6 +11,7 @@ import java.util.List;
 
 public class Bitcask {
 
+    private static Bitcask simgletonBitcask;
     private final int maxSegmentSize = 200;
     private Segment segment;
     private List<Segment> segments;
@@ -29,13 +30,26 @@ public class Bitcask {
         this.numOfSegments = segments.size();
     }
 
+    public static Bitcask getBitcask() {
+        if (simgletonBitcask == null) {
+            simgletonBitcask = new Bitcask();
+        }
+        return simgletonBitcask;
+    }
+
+    public static Bitcask setBitcask(Bitcask bitcask) {
+        simgletonBitcask = bitcask;
+        return simgletonBitcask;
+    }
+
     public void write(Message message) {
+        this.handleExceedingMaxSize();
+        // this line is put at the first of the function to handle scenarios when server fails during recovery
+
         MessageToByteConverter messageToByteConverter = new MessageToByteConverter(message);
         byte[] data = messageToByteConverter.convert();
 
         this.segment.write(message.getStation_id(), data);
-
-        this.handleExceedingMaxSize();
     }
 
     public Message read(Long stationId) {
@@ -52,8 +66,11 @@ public class Bitcask {
     }
 
     private void handleExceedingMaxSize() {
-        if (this.segment.getSize() > maxSegmentSize) {
-            segment = new Segment(++numOfSegments);
+        if (this.segment.getSize() >= maxSegmentSize) {
+            segment = new Segment(numOfSegments);
+            RecoveryInformationUpdater recoveryInformationUpdater = new RecoveryInformationUpdater();
+            recoveryInformationUpdater.addSegment(numOfSegments);
+            numOfSegments++;
             segments.add(segment);
         }
     }

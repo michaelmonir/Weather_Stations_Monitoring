@@ -1,6 +1,6 @@
 package com.example.bitcask.File;
 
-import com.example.bitcask.Bitcask.FileException;
+import com.example.bitcask.Exceptions.FileException;
 import com.example.bitcask.Message.Message;
 
 import java.io.FileInputStream;

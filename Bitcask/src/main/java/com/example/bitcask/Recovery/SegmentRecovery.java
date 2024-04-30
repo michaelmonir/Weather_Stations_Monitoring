@@ -1,6 +1,6 @@
 package com.example.bitcask.Recovery;
 
-import com.example.bitcask.Bitcask.FileException;
+import com.example.bitcask.Exceptions.FileException;
 import com.example.bitcask.File.BinaryFileOperations;
 import com.example.bitcask.File.FileNameGetter;
 import com.example.bitcask.Message.ByteToMessageConverter;
