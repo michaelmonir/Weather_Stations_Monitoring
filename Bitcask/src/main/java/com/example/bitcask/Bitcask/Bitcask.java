@@ -1,6 +1,7 @@
 package com.example.bitcask.Bitcask;
 
 import com.example.bitcask.Exceptions.NoMessageWithThisIdException;
+import com.example.bitcask.Hashmap.MyMap;
 import com.example.bitcask.Message.Message;
 import com.example.bitcask.Message.MessageToByteConverter;
 import com.example.bitcask.Recovery.RecoveryInformationUpdater;
@@ -12,6 +13,7 @@ import java.util.List;
 
 public class Bitcask {
 
+    private MyMap myMap;
     private static Bitcask simgletonBitcask;
     private final int maxSegmentSize = 100;
     private Segment segment;
@@ -20,10 +22,13 @@ public class Bitcask {
 
     public Bitcask() {
         segments = new ArrayList<>();
+        this.myMap = new MyMap();
         segment = new Segment(SegmentIncreamenter.getAndIncreament());
         segments.add(segment);
     }
 
+
+    //////////////////////
     public Bitcask(List<Segment> segments) {
         this.segments = segments;
         this.segment = segments.get(segments.size() - 1);
