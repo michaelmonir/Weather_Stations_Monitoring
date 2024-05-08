@@ -26,10 +26,10 @@ public class BitcaskApplication {
 			Bitcask.getBitcask().write(message);
 		}
 
-//		Compactor compactor = new Compactor(
-//				new CompactionStrategyImpl(),
-//				new IntervalMergerStrategyDevideAndConquerImpl());
-//		compactor.compact();
+		Compactor compactor = new Compactor(
+				new CompactionStrategyImpl(),
+				new IntervalMergerStrategyDevideAndConquerImpl());
+		compactor.compact();
 
 		Bitcask bitcask = Bitcask.getBitcask();
 

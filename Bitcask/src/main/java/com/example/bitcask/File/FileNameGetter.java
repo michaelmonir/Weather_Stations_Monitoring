@@ -9,4 +9,8 @@ public class FileNameGetter {
     public static String getHintFileName(int fileIndex) {
         return getFileName(fileIndex) + ".hint";
     }
+
+    public static String getNameWithPath(String fileName) {
+        return "Files/" + fileName;
+    }
 }
