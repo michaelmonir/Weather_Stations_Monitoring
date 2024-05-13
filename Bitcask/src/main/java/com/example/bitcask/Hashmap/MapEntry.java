@@ -1,12 +1,13 @@
 package com.example.bitcask.Hashmap;
 
-
-class FileWithOffset {
+public class MapEntry {
     public int fileIndex;
     public int offset;
+    public Long timestamp;
 
-    public FileWithOffset(int fileIndex, int offset) {
+    public MapEntry(Long timestamp, int fileIndex, int offset) {
         this.fileIndex = fileIndex;
         this.offset = offset;
+        this.timestamp = timestamp;
     }
 }

@@ -1,9 +1,12 @@
 package com.example.bitcask.Bitcask;
 
-import com.example.bitcask.Exceptions.NoMessageWithThisIdException;
+import com.example.bitcask.Exceptions.BiggerTimestampExistsException;
+import com.example.bitcask.File.BinaryFileOperations;
+import com.example.bitcask.File.FileNameGetter;
+import com.example.bitcask.Hashmap.MapEntry;
 import com.example.bitcask.Hashmap.MyMap;
+import com.example.bitcask.Message.ByteToMessageConverter;
 import com.example.bitcask.Message.Message;
-import com.example.bitcask.Message.MessageToByteConverter;
 import com.example.bitcask.Recovery.RecoveryInformationUpdater;
 import com.example.bitcask.Segments.Segment;
 import lombok.Getter;
@@ -27,8 +30,6 @@ public class Bitcask {
         segments.add(segment);
     }
 
-
-    //////////////////////
     public Bitcask(List<Segment> segments) {
         this.segments = segments;
         this.segment = segments.get(segments.size() - 1);
@@ -48,25 +49,23 @@ public class Bitcask {
 
     public void write(Message message) {
         this.handleExceedingMaxSize();
-        // this line is put at the first of the function to handle scenarios when server fails during recovery
 
-        MessageToByteConverter messageToByteConverter = new MessageToByteConverter(message);
-        byte[] data = messageToByteConverter.convert();
-
-        this.segment.write(message.getStation_id(), data);
+        try {
+            MapEntry mapEntry = this.segment.write(message);
+            this.myMap.put(message.getStation_id(), mapEntry);
+        } catch (BiggerTimestampExistsException e) {
+        }
     }
 
     public Message read(Long stationId) {
-        Segment segment = getSegmentOfWrite(stationId);
-        return segment.read(stationId);
-    }
+        MapEntry mapEntry = myMap.get(stationId);
+        int fileIndex = mapEntry.fileIndex, offset = mapEntry.offset;
 
-    private Segment getSegmentOfWrite(long stationId) {
-        for (int i = segments.size() - 1; i >= 0; i--) {
-            if (segments.get(i).hasStation(stationId))
-                return segments.get(i);
-        }
-        throw new NoMessageWithThisIdException();
+        String fileName = FileNameGetter.getFileName(fileIndex);
+        byte[] bytes = BinaryFileOperations.readFromFile(fileName, offset);
+
+        ByteToMessageConverter byteToMessageConverter = new ByteToMessageConverter(bytes);
+        return byteToMessageConverter.convert();
     }
 
     private void handleExceedingMaxSize() {

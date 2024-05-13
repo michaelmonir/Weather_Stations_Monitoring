@@ -26,7 +26,8 @@ public class SegmentRecovery {
 
     public Segment recover() {
         getHashMap();
-        return new Segment(this.fileIndex, this.map, this.size);
+        return null;
+//        return new Segment(this.fileIndex, this.map, this.size);
     }
 
     private void getHashMap() {

@@ -1,20 +1,36 @@
 package com.example.bitcask.Hashmap;
 
-import java.util.HashMap;
+import com.example.bitcask.Exceptions.BiggerTimestampExistsException;
+import com.example.bitcask.Exceptions.IdDoesNotExistException;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 public class MyMap {
 
-    private HashMap<Long, FileWithOffset> hashMap;
+    private ConcurrentHashMap<Long, MapEntry> hashMap;
 
     public MyMap() {
-        this.hashMap = new HashMap<>();
+        this.hashMap = new ConcurrentHashMap<>();
     }
 
-    public FileWithOffset get(long key) {
+    public MapEntry get(long key) {
+        if (!hashMap.containsKey(key)) throw new IdDoesNotExistException();
         return hashMap.get(key);
     }
 
-    public void put(long key, int fileIndex, int offset) {
-        hashMap.put(key, new FileWithOffset(fileIndex, offset));
+    public boolean containsKey(long key) {
+        return hashMap.containsKey(key);
+    }
+
+    public MapEntry put(long key, Long timestamp, int fileIndex, int offset) {
+        if (hashMap.containsKey(key) && hashMap.get(key).timestamp > timestamp)
+            throw new BiggerTimestampExistsException();
+        MapEntry entry = new MapEntry(timestamp, fileIndex, offset);
+        hashMap.put(key, entry);
+        return entry;
+    }
+
+    public void put(Long stationId, MapEntry mapEntry) {
+        this.hashMap.put(stationId, mapEntry);
     }
 }

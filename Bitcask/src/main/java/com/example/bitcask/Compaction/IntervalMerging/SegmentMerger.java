@@ -29,9 +29,9 @@ public class SegmentMerger {
     }
 
     private void iterate(Segment segment, Consumer<Long> function) {
-        segment.getMap().entrySet().stream()
-                .sorted(Map.Entry.comparingByValue())
-                .forEach(entry -> function.accept(entry.getKey()));
+//        segment.getMap().entrySet().stream()
+//                .sorted(Map.Entry.comparingByValue())
+//                .forEach(entry -> function.accept(entry.getKey()));
     }
 
     private void IterationSegment1(Long stationId) {
@@ -50,6 +50,6 @@ public class SegmentMerger {
         MessageToByteConverter messageToByteConverter = new MessageToByteConverter(message);
         byte[] data = messageToByteConverter.convert();
 
-        resultSegment.write(stationId, data);
+//        resultSegment.write(stationId, data);
     }
 }
