@@ -21,7 +21,7 @@ public class Bitcask {
 
     private MyMap myMap;
     private static Bitcask simgletonBitcask;
-    private final int maxSegmentSize = 100;
+    private final int maxSegmentSize = 1;
     private Segment segment;
     @Getter
     @Setter

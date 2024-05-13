@@ -40,10 +40,10 @@ public class Merger {
         this.resultSegment = new Segment(SegmentIncreamenter.getAndIncreament());
 
         this.calculateOldSegmentsMap();
-        writeMapToFile();
+        this.writeMapToFile();
         this.writeHint();
 
-        Bitcask.getBitcask().mergeWithMap(this.oldSegmentsMap);
+        Bitcask.getBitcask().mergeWithMap(this.resultSegment.getMyMap());
 
         this.deleteOldFilesAndSetSegment();
     }
