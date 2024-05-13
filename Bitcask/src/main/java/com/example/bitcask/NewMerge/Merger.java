@@ -7,7 +7,7 @@ import com.example.bitcask.Segments.Segment;
 public class Merger {
 
     private Segment resultSegment;
-    MapGenerator mapGenerator;
+    private MapGenerator mapGenerator;
 
     public void run() {
         if (Bitcask.getBitcask().getSegments().size() < 2)

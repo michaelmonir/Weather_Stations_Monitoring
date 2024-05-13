@@ -21,7 +21,7 @@ public class Bitcask {
 
     private MyMap myMap;
     private static Bitcask simgletonBitcask;
-    private final int maxSegmentSize = 1;
+    private static int maxSegmentSize = 1;
     private Segment segment;
     @Getter
     @Setter
@@ -49,6 +49,10 @@ public class Bitcask {
     public static Bitcask setBitcask(Bitcask bitcask) {
         simgletonBitcask = bitcask;
         return simgletonBitcask;
+    }
+
+    public static void setMaxSegmentSize(int maxSegmentSize) {
+        Bitcask.maxSegmentSize = maxSegmentSize;
     }
 
     public synchronized void write(Message message) {
