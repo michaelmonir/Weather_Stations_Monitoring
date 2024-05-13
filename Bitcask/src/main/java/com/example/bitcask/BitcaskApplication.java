@@ -1,10 +1,6 @@
 package com.example.bitcask;
 
 import com.example.bitcask.Bitcask.Bitcask;
-import com.example.bitcask.Compaction.CompactionScheduler;
-import com.example.bitcask.Compaction.CompactionStrategyImpl;
-import com.example.bitcask.Compaction.Compactor;
-import com.example.bitcask.Compaction.IntervalMerging.IntervalMergerStrategyDevideAndConquerImpl;
 import com.example.bitcask.Message.Message;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -3,6 +3,8 @@ package com.example.bitcask.Hashmap;
 import com.example.bitcask.Exceptions.BiggerTimestampExistsException;
 import com.example.bitcask.Exceptions.IdDoesNotExistException;
 
+import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MyMap {
@@ -18,6 +20,10 @@ public class MyMap {
         return hashMap.get(key);
     }
 
+    public Iterator<Map.Entry<Long, MapEntry>> getIterator() {
+        return hashMap.entrySet().iterator();
+    }
+
     public boolean containsKey(long key) {
         return hashMap.containsKey(key);
     }
@@ -31,6 +37,6 @@ public class MyMap {
     }
 
     public void put(Long stationId, MapEntry mapEntry) {
-        this.hashMap.put(stationId, mapEntry);
+        this.put(stationId, mapEntry.timestamp, mapEntry.fileIndex, mapEntry.offset);
     }
 }

@@ -10,9 +10,12 @@ import com.example.bitcask.Message.Message;
 import com.example.bitcask.Recovery.RecoveryInformationUpdater;
 import com.example.bitcask.Segments.Segment;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class Bitcask {
 
@@ -21,6 +24,7 @@ public class Bitcask {
     private final int maxSegmentSize = 100;
     private Segment segment;
     @Getter
+    @Setter
     private List<Segment> segments;
 
     public Bitcask() {
@@ -47,7 +51,9 @@ public class Bitcask {
         return simgletonBitcask;
     }
 
-    public void write(Message message) {
+    public synchronized void write(Message message) {
+        BitcaskLocks.lockRead();
+
         this.handleExceedingMaxSize();
 
         try {
@@ -55,9 +61,12 @@ public class Bitcask {
             this.myMap.put(message.getStation_id(), mapEntry);
         } catch (BiggerTimestampExistsException e) {
         }
+        BitcaskLocks.unlockRead();
     }
 
     public Message read(Long stationId) {
+        BitcaskLocks.lockRead();
+
         MapEntry mapEntry = myMap.get(stationId);
         int fileIndex = mapEntry.fileIndex, offset = mapEntry.offset;
 
@@ -65,7 +74,17 @@ public class Bitcask {
         byte[] bytes = BinaryFileOperations.readFromFile(fileName, offset);
 
         ByteToMessageConverter byteToMessageConverter = new ByteToMessageConverter(bytes);
+
+        BitcaskLocks.lockRead();
         return byteToMessageConverter.convert();
+    }
+
+    public void mergeWithMap(MyMap otherMap) {
+        Iterator it = otherMap.getIterator();
+        while (it.hasNext()) {
+            Map.Entry<Long, MapEntry> entry = (Map.Entry<Long, MapEntry>) it.next();
+            this.myMap.put(entry.getKey(), entry.getValue());
+        }
     }
 
     private void handleExceedingMaxSize() {

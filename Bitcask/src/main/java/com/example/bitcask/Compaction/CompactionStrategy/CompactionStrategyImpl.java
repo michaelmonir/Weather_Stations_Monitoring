@@ -1,12 +1,12 @@
-package com.example.bitcask.Compaction;
+package com.example.bitcask.Compaction.CompactionStrategy;
 
-import com.example.bitcask.Segments.Segment;
+import com.example.bitcask.Compaction.Interval;
 
 import java.util.List;
 
 public class CompactionStrategyImpl implements CompactionStrategy {
     @Override
-    public List<Interval> getCompactionIntervals(List<Segment> segments) {
+    public List<Interval> getCompactionIntervals(List<Integer> segments) {
         int size = segments.size();
         if (size == 0)
             return List.of();

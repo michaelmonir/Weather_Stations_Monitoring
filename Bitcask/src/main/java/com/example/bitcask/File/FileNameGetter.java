@@ -13,4 +13,8 @@ public class FileNameGetter {
     public static String getNameWithPath(String fileName) {
         return "Files/" + fileName;
     }
+
+    public static String getIndexesFileName() {
+        return "indexes.txt";
+    }
 }

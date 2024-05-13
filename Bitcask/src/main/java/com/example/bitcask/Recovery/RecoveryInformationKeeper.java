@@ -25,7 +25,8 @@ public class RecoveryInformationKeeper {
             List<Segment> segments = this.getSegments(reader);
 
             SegmentIncreamenter.recover(segments);
-            return new Bitcask(segments);
+//            return new Bitcask(segments);
+            return new Bitcask();
         } catch (IOException e) {
             throw new FileException();
         }

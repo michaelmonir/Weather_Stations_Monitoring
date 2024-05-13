@@ -51,6 +51,12 @@ public class Segment {
         return myMap.put(message.getStation_id(), message.getStatus_timestamp(), this.segmentIndex, offset);
     }
 
+    public MapEntry write(Long stationId, Long timeStamp, byte[] bytes) {
+        int offset = this.writeToFileAndGetOffset(bytes);
+
+        return myMap.put(stationId, timeStamp, this.segmentIndex, offset);
+    }
+
     public Message read(Long stationId) {
         int offset = myMap.get(stationId).offset;
         byte[] data = BinaryFileOperations
