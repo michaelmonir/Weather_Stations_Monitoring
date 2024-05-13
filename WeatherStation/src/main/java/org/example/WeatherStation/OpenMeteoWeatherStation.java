@@ -1,4 +1,4 @@
-package org.example.weatherstatusmsg;
+package org.example.WeatherStation;
 
 
 import org.example.kafka.Producer;
@@ -62,11 +62,11 @@ public class OpenMeteoWeatherStation {
         Thread.sleep(1000 - apiCallTime);
     }
 
-    public static void main(String[] args) throws Exception {
-        OpenMeteoWeatherStation openMeteoWeather = new OpenMeteoWeatherStation();
-        while(true){
-            openMeteoWeather.send();
-        }
-    }
+//    public static void main(String[] args) throws Exception {
+//        OpenMeteoWeatherStation openMeteoWeather = new OpenMeteoWeatherStation();
+//        while(true){
+//            openMeteoWeather.send();
+//        }
+//    }
 
 }

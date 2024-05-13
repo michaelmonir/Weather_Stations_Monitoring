@@ -1,4 +1,4 @@
-package org.example.weatherstatusmsg;
+package org.example.WeatherStation;
 
 public enum BatteryStatus {
     LOW,

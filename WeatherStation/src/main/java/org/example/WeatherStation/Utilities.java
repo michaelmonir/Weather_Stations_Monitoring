@@ -1,4 +1,4 @@
-package org.example.weatherstatusmsg;
+package org.example.WeatherStation;
 
 
 import com.google.gson.Gson;
