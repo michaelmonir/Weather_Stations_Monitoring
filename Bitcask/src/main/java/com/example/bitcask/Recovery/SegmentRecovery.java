@@ -14,19 +14,19 @@ public class SegmentRecovery {
 
     int size = 0;
     HashMap<Long, Integer> map;
-    String fileName;
+    int fileIndex;
     FileInputStream fileInputStream;
 
     public SegmentRecovery(int fileIndex) {
         size = 0;
         map = new HashMap<>();
-        fileName = FileNameGetter.getFileName(fileIndex);
-        fileInputStream = BinaryFileOperations.getFileInputStream(fileName);
+        this.fileIndex = fileIndex;
+        fileInputStream = BinaryFileOperations.getFileInputStream(FileNameGetter.getFileName(fileIndex));
     }
 
     public Segment recover() {
         getHashMap();
-        return new Segment(this.fileName, this.map, this.size);
+        return new Segment(this.fileIndex, this.map, this.size);
     }
 
     private void getHashMap() {

@@ -29,6 +29,7 @@ public class Compactor {
 
         List<Integer> segmentIndeces = getSegmentIndeces(segments);
         TextFileAtmoicUpdator.writeList(segmentIndeces, "recoveryInformation.txt");
+        FileCleaner.cleanExtraFiles(newBitcask);
 
         Bitcask.setBitcask(newBitcask);
     }

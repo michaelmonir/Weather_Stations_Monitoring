@@ -7,34 +7,30 @@ import com.example.bitcask.Message.Message;
 import lombok.Getter;
 
 import java.util.HashMap;
-import java.util.Iterator;
 
 public class Segment {
 
-    private String fileName;
+    @Getter
+    private int segmentIndex;
     @Getter
     private HashMap<Long, Integer> map;
     @Getter
     private int size;
 
-    public Segment(int fileIndex) {
+    public Segment(int segmentIndex) {
         this.size = 0;
-        fileName = FileNameGetter.getFileName(fileIndex);
+        this.segmentIndex = segmentIndex;
         this.map = new HashMap<>();
     }
 
-    public Segment(String fileName, HashMap<Long, Integer> map, int size) {
-        this.fileName = fileName;
+    public Segment(int segmentIndex, HashMap<Long, Integer> map, int size) {
+        this.segmentIndex = segmentIndex;
         this.map = map;
         this.size = size;
     }
 
-    public int getSegmentIndex() {
-        return Integer.parseInt(this.fileName);
-    }
-
     public int writeToFileAndGetOffset(byte[] data) {
-        BinaryFileOperations.writeToFile(this.fileName, data);
+        BinaryFileOperations.writeToFile(FileNameGetter.getFileName(this.segmentIndex), data);
 
         int ret = size;
         size += Message.MESSAGE_SIZE;
@@ -52,7 +48,7 @@ public class Segment {
 
     public Message read(Long stationId) {
         int offset = map.get(stationId);
-        byte[] data = BinaryFileOperations.readFromFile(this.fileName, offset);
+        byte[] data = BinaryFileOperations.readFromFile(FileNameGetter.getFileName(this.segmentIndex), offset);
 
         ByteToMessageConverter byteToMessageConverter = new ByteToMessageConverter(data);
         return byteToMessageConverter.convert();

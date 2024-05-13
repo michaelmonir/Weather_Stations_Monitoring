@@ -21,7 +21,7 @@ public class BitcaskApplication {
 //		RecoveryInformationKeeper recoveryInformationKeeper = new RecoveryInformationKeeper();
 //		Bitcask.setBitcask(recoveryInformationKeeper.recover());
 
-		for (long i = 1; i <= 1000; i++) {
+		for (long i = 1; i <= 20; i++) {
 			Message message = new Message(i, i, (short)i, i, (int)i, (int)i, (int)i);
 			Bitcask.getBitcask().write(message);
 		}
@@ -36,9 +36,9 @@ public class BitcaskApplication {
 		int z = 0;
 		z++;
 
-//		for (int i = 1; i <= 20; i++) {
-//			Message message = Bitcask.getBitcask().read((long)i);
-//			System.out.println(message.toString());
-//		}
+		for (int i = 1; i <= 20; i++) {
+			Message message = Bitcask.getBitcask().read((long)i);
+			System.out.println(message.toString());
+		}
 	}
 }
