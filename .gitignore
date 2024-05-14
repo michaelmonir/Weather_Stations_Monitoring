@@ -8,3 +8,9 @@
 *.log
 *.iml
 *.xml
+*.lst
+*.out
+*.jar
+*.MF
+*.properties
+
