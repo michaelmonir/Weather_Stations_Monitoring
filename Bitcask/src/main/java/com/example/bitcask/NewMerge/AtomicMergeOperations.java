@@ -2,7 +2,6 @@ package com.example.bitcask.NewMerge;
 
 import com.example.bitcask.Bitcask.Bitcask;
 import com.example.bitcask.Bitcask.BitcaskLocks;
-import com.example.bitcask.Compaction.FileCleaner;
 import com.example.bitcask.File.FileNameGetter;
 import com.example.bitcask.File.TextFileAtmoicUpdator;
 import com.example.bitcask.Segments.Segment;

@@ -79,7 +79,7 @@ public class Bitcask {
 
         ByteToMessageConverter byteToMessageConverter = new ByteToMessageConverter(bytes);
 
-        BitcaskLocks.lockRead();
+        BitcaskLocks.unlockRead();
         return byteToMessageConverter.convert();
     }
 
