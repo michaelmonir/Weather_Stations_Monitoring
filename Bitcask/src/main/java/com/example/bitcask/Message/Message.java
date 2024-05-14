@@ -25,6 +25,16 @@ public class Message {
         this.wind_speed = wind_speed;
     }
 
+    public Message(long key) {
+        this.station_id = key;
+        this.s_no = key;
+        this.battery_status = (short)key;
+        this.status_timestamp = key;
+        this.humidity = (int)key;
+        this.temperature = (int)key;
+        this.wind_speed = (int)key;
+    }
+
     @Override
     public String toString() {
         return "Message{" +

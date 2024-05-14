@@ -9,10 +9,13 @@ public class BitcaskRunner {
         Bitcask.setMaxSegmentSize(maxSegmentSize);
         Bitcask.setBitcask(new Bitcask());
         MergeScheduler.setInterval(mergeScheduleTime);
+
+        MergeScheduler mergeScheduler = new MergeScheduler();
+        mergeScheduler.start();
     }
 
     public static void put(long key) {
-        Message message = new Message(key, key, (short)key, key, (int)key, (int)key, (int)key);
+        Message message = new Message(key);
         Bitcask.getBitcask().write(message);
     }
 

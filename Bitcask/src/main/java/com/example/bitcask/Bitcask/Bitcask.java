@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Bitcask {
 
@@ -26,6 +27,8 @@ public class Bitcask {
     @Getter
     @Setter
     private List<Segment> segments;
+    public static AtomicInteger bitcaskDebugger = new AtomicInteger(0);
+    public static AtomicInteger getBitcaskDebuggerStatus = new AtomicInteger(0);
 
     public Bitcask() {
         segments = new ArrayList<>();
@@ -69,9 +72,9 @@ public class Bitcask {
     }
 
     public Message read(Long stationId) {
-        BitcaskLocks.lockRead();
+        MapEntry mapEntry = myMap.get(stationId); // get first to make sure it is already present
 
-        MapEntry mapEntry = myMap.get(stationId);
+        BitcaskLocks.lockRead();
         int fileIndex = mapEntry.fileIndex, offset = mapEntry.offset;
 
         String fileName = FileNameGetter.getFileName(fileIndex);

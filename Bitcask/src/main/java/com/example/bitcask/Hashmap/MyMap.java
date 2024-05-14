@@ -3,16 +3,17 @@ package com.example.bitcask.Hashmap;
 import com.example.bitcask.Exceptions.BiggerTimestampExistsException;
 import com.example.bitcask.Exceptions.IdDoesNotExistException;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MyMap {
 
-    private ConcurrentHashMap<Long, MapEntry> hashMap;
+    private HashMap<Long, MapEntry> hashMap;
 
     public MyMap() {
-        this.hashMap = new ConcurrentHashMap<>();
+        this.hashMap = new HashMap<>();
     }
 
     public MapEntry get(long key) {
