@@ -1,4 +1,4 @@
-./parquet-archive
+parquet-archive
 ./.idea
 ./*/target
 
@@ -13,4 +13,5 @@
 *.jar
 *.MF
 *.properties
+classpath.txt
 
