@@ -1,6 +1,6 @@
 parquet-archive
 ./.idea
-./*/target
+target
 
 *.class
 *.parquet
