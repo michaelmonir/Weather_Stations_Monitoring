@@ -13,21 +13,10 @@ public class Merger {
         if (Bitcask.getBitcask().getSegments().size() < 2)
             return;
         this.mapGenerator = new MapGenerator();
-
         this.setResultSegment();
-        this.mergeIntervalsAndGetOthers();
-    }
-
-    private void mergeIntervalsAndGetOthers() {
-        MergedFilesWriter mergedFilesWriter
-                = new MergedFilesWriter(this.mapGenerator.getMap(), this.resultSegment);
-        mergedFilesWriter.run();
-
+        this.writeMergedFile();
         this.mergeWithBitcaskMap();
-
-        AtomicMergeOperations atomicMergeOperations
-                = new AtomicMergeOperations(this.resultSegment, this.mapGenerator.getLastSegmentIndex());
-        atomicMergeOperations.deleteOldFilesAndSetSegment();
+        this.doAtomicOperations();
     }
 
     private void setResultSegment() {
@@ -36,5 +25,17 @@ public class Merger {
 
     private void mergeWithBitcaskMap() {
         Bitcask.getBitcask().mergeWithMap(this.resultSegment.getMyMap());
+    }
+
+    private void writeMergedFile() {
+        MergedFileWriter mergedFileWriter
+                = new MergedFileWriter(this.mapGenerator.getMap(), this.resultSegment);
+        mergedFileWriter.run();
+    }
+
+    private void doAtomicOperations() {
+        AtomicMergeOperations atomicMergeOperations
+                = new AtomicMergeOperations(this.resultSegment, this.mapGenerator.getLastSegmentIndex());
+        atomicMergeOperations.deleteOldFilesAndSetSegment();
     }
 }

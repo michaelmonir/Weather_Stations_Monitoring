@@ -9,12 +9,12 @@ import com.example.bitcask.Segments.Segment;
 import java.util.Iterator;
 import java.util.Map;
 
-public class MergedFilesWriter {
+public class MergedFileWriter {
 
     MyMap map;
     Segment resultSegment;
 
-    public MergedFilesWriter(MyMap map, Segment resultSegment) {
+    public MergedFileWriter(MyMap map, Segment resultSegment) {
         this.map = map;
         this.resultSegment = resultSegment;
     }
