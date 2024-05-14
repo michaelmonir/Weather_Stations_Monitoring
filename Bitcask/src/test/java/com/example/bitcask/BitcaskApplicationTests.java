@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.FileNotFoundException;
+
 @SpringBootTest
 class BitcaskApplicationTests {
 
@@ -133,6 +135,39 @@ class BitcaskApplicationTests {
 			thread2.join();
 		} catch (InterruptedException e) {
 		}
+	}
+
+	@Test
+	public void addWithGetwithMergeConcurrentBigFilesFiles() {
+//		try {
+			BitcaskRunner.start(1_000 * 38, 100L);
+			Thread thread1 = new Thread(() -> {
+				for (int i = 0; i < 1_000_000; i++) {
+					int random = (int) (Math.random() * 1000);
+					BitcaskRunner.put(random);
+				}
+			});
+			Thread thread2 = new Thread(() -> {
+				for (int i = 0; i < 1_000_000; i++) {
+					try {
+						int random = (int) (Math.random() * 1000);
+						Message message = BitcaskRunner.read(random);
+						Assertions.assertEquals(random, message.getS_no());
+					} catch (IdDoesNotExistException e) {
+					}
+				}
+			});
+
+			thread1.start();
+			thread2.start();
+			try {
+				thread1.join();
+				thread2.join();
+			} catch (InterruptedException e) {
+			}
+//		} catch (Exception e) {
+//			System.out.println("xxx");
+//		}
 	}
 }
 

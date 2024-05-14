@@ -25,7 +25,6 @@ public class AtomicMergeOperations {
         this.setSegmentsList();
         this.updateUsedSegmentsFile();
         FileCleaner.cleanExtraFiles(Bitcask.getBitcask());
-
         BitcaskLocks.unlockWrite();
     }
 
