@@ -7,6 +7,7 @@ import com.example.bitcask.Hashmap.MapEntry;
 import com.example.bitcask.Hashmap.MyMap;
 import com.example.bitcask.Message.ByteToMessageConverter;
 import com.example.bitcask.Message.Message;
+import com.example.bitcask.NewMerge.MergeScheduler;
 import com.example.bitcask.Recovery.RecoveryInformationUpdater;
 import com.example.bitcask.Segments.Segment;
 import lombok.Getter;
@@ -24,6 +25,7 @@ public class Bitcask {
     private static Bitcask simgletonBitcask;
     private static int maxSegmentSize = 1;
     private Segment segment;
+    private static int maxNumOfSegments = 1000000;
     @Getter
     @Setter
     private List<Segment> segments;
@@ -58,10 +60,15 @@ public class Bitcask {
         Bitcask.maxSegmentSize = maxSegmentSize;
     }
 
+    public static void setMaxNumOfSegments(int maxNumberOfSegments) {
+        Bitcask.maxNumOfSegments = maxNumberOfSegments;
+    }
+
     public synchronized void write(Message message) {
         BitcaskLocks.lockRead();
 
         this.handleExceedingMaxSize();
+        this.handleMaxNumOfSegments();
 
         try {
             MapEntry mapEntry = this.segment.write(message);
@@ -103,6 +110,12 @@ public class Bitcask {
             recoveryInformationUpdater.addSegment(segmentIndex);
 
             segments.add(segment);
+        }
+    }
+
+    private void handleMaxNumOfSegments() {
+        if (this.segments.size() >= maxNumOfSegments) {
+            MergeScheduler.resume();
         }
     }
 }

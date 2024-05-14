@@ -1,10 +1,9 @@
 package com.example.bitcask.NewMerge;
 
-import com.example.bitcask.Exceptions.UnkownErrorException;
-
 public class MergeScheduler implements Runnable {
 
     private static Thread thread;
+    private static boolean isSleaping = false;
 
     int numOfTimes = 0;
     int maxNumOfTimes;
@@ -24,7 +23,8 @@ public class MergeScheduler implements Runnable {
     }
 
     public static void resume() {
-        MergeScheduler.thread.interrupt();
+        if (isSleaping)
+            MergeScheduler.thread.interrupt();
     }
 
     private static Long interval = 1000L;
@@ -37,9 +37,11 @@ public class MergeScheduler implements Runnable {
     public void run() {
         while (this.numOfTimes < this.maxNumOfTimes) {
             try {
+                isSleaping = true;
                 Thread.sleep(interval);
             } catch (InterruptedException e) {
             }
+            isSleaping = false;
             Merger merger = new Merger();
             merger.run();
             this.numOfTimes++;
