@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka-consumer
+  template:
+    metadata:
+      labels:
+        app: kafka-consumer
+    spec:
+      containers:
+        - name: kafka-consumer
+          image: michaelmonir2/micrepository:consumer8
+          env:
+            - name: KAFKA_SERVER
+              value: kafka-service
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-consumer-service
+spec:
+  selector:
+    app: kafka-consumer
+  ports:
+    - name: consumer-port
+      protocol: TCP
+      port: 8081  # Adjust the port as per your consumer's configuration
+      targetPort: 8080  # Adjust the targetPort as per your consumer's configuration
