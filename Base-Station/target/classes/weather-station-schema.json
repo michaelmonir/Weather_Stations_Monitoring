@@ -5,7 +5,7 @@
     "station_id": { "type": "integer" },
     "s_no": { "type": "integer" },
     "battery_status": { "type": "string", "enum": ["low", "medium", "high"] },
-    "status_timestamp": { "type": "integer" },
+    "status_timestamp": { "type": "number", "format": "date-time"},
     "weather": {
       "type": "object",
       "properties": {

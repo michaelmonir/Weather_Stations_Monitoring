@@ -31,8 +31,9 @@ public class WeatherMessage implements Serializable {
     private String batteryStatus;
 
     @JsonProperty("status_timestamp")
-    private int statusTimestamp;
+    private Long statusTimestamp;
 
+    @JsonProperty("weather")
     private WeatherData weather;
     public static WeatherMessage fromJson(String message) {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -44,7 +45,34 @@ public class WeatherMessage implements Serializable {
         }
     }
 
-    public static class WeatherData {
+    public static Object getClassSchema() {
+        return new Schema.Parser().parse(
+                "{\n" +
+                        "  \"type\": \"record\",\n" +
+                        "  \"name\": \"WeatherMessage\",\n" +
+                        "  \"fields\": [\n" +
+                        "    {\"name\": \"station_id\", \"type\": \"long\"},\n" +
+                        "    {\"name\": \"s_no\", \"type\": \"long\"},\n" +
+                        "    {\"name\": \"battery_status\", \"type\": \"string\"},\n" +
+                        "    {\"name\": \"status_timestamp\", \"type\": \"long\"},\n" +
+                        "    {\"name\": \"weather\",\n" +
+                        "      \"type\": {\n" +
+                        "        \"type\": \"record\",\n" +
+                        "        \"name\": \"WeatherData\",\n" +
+                        "        \"fields\": [\n" +
+                        "          {\"name\": \"humidity\", \"type\": \"int\"},\n" +
+                        "          {\"name\": \"temperature\", \"type\": \"int\"},\n" +
+                        "          {\"name\": \"wind_speed\", \"type\": \"int\"}\n" +
+                        "        ]\n" +
+                        "      }\n" +
+                        "    }\n" +
+                        "  ]\n" +
+                        "}"
+        );
+    }
+
+    @Data
+    public static class WeatherData implements Serializable {
         @JsonProperty("humidity")
         private int humidity;
         @JsonProperty("temperature")
@@ -76,6 +104,5 @@ public class WeatherMessage implements Serializable {
         avroRecord.put("temperature", weather.temperature);
         avroRecord.put("wind_speed", weather.windSpeed);
         return avroRecord;
-
     }
 }

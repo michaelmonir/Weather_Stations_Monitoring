@@ -1,4 +1,4 @@
-package org.example.parquet;
+package org.example.parquet.writers;
 
 import org.example.models.WeatherMessage;
 import org.apache.hadoop.conf.Configuration;
@@ -13,26 +13,49 @@ import java.util.Map;
 
 import java.util.*;
 
-public class ArchiveHandler {
+public class HadoopArchiveHandler implements Archiver {
 
     private final String archivePath;
     private final int batchSize;
     private final List<WeatherMessage> messageBuffer =new ArrayList<>();
     private final Map<String, ParquetFileWriter> parquetWriters = new HashMap<>();
 
-    public ArchiveHandler(String archivePath, int batchSize) throws IOException {
+    private final Map<Integer,List<String>> fileMap = new HashMap<>();
+
+    public HadoopArchiveHandler(String archivePath, int batchSize) throws IOException {
         this.archivePath = archivePath;
         this.batchSize = batchSize;
-
-        // Create archive directory if it doesn't exist
         FileSystem fs = FileSystem.get(new Configuration());
         Path archiveDirPath = new Path(archivePath);
         if (!fs.exists(archiveDirPath)) {
             fs.mkdirs(archiveDirPath);
         }
+
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                for (Map.Entry<Integer, List<String>> entry : fileMap.entrySet()) {
+                    List<String> files = entry.getValue();
+                    if (files.size() > 2) {
+                        String oldestFile = files.remove(0);
+                        ParquetFileWriter writer = parquetWriters.remove(oldestFile);
+                        try {
+                            writer.close();
+                        } catch (IOException e) {
+                            System.out.println("Error closing writer: " + e.getMessage());
+                        }
+                    }
+                }
+            }
+        }, 0, 5000);
+
+
     }
 
-    public void receiveWeatherMessage(WeatherMessage weatherMessage) throws IOException {
+    @Override
+
+    public void receiveWeatherMessage(WeatherMessage weatherMessage) {
         messageBuffer.add(weatherMessage);
         if (messageBuffer.size() >= batchSize) {
             writeBufferToParquet(messageBuffer);
@@ -42,12 +65,17 @@ public class ArchiveHandler {
 
     private String getParquetFilePath(WeatherMessage weatherMessage) {
         String stationId = String.valueOf(weatherMessage.getStationId());
-        String dateString = new SimpleDateFormat("yyyy-MM-dd").format(new Date(weatherMessage.getStatusTimestamp()));
+        //string data format for the file name have to be in the format of "yyyy-MM-dd-HH-mm-ss"
+        String dateString = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date(weatherMessage.getStatusTimestamp()));
+
+//        String dateString = new SimpleDateFormat("yyyy-MM-dd").format(new Date(weatherMessage.getStatusTimestamp()));
         String stationDirPath = archivePath + "/" + stationId;
         String PARQUET_EXTENSION = ".parquet";
         String parquetFileName = dateString + "_" + stationId + PARQUET_EXTENSION;
         return stationDirPath + "/" + parquetFileName;
     }
+
+
 
     private void writeBufferToParquet(List<WeatherMessage> buffer){
 
@@ -55,7 +83,9 @@ public class ArchiveHandler {
 
         for (WeatherMessage message : buffer) {
             String parquetFilePath = getParquetFilePath(message);
+
             parquetWriters.computeIfAbsent(parquetFilePath, filePath -> {
+                fileMap.computeIfAbsent(message.getStationId(), k -> new ArrayList<>()).add(parquetFilePath);
                 try {
                     return new ParquetFileWriter(filePath);
                 } catch (IOException e) {
@@ -66,21 +96,10 @@ public class ArchiveHandler {
         }
 
         List<Thread> threads = new ArrayList<>();
-//        System.out.println("messageBuffer: " + messageBuffer.size());
         for (Map.Entry<String, List<WeatherMessage>> entry : messageBuffer.entrySet()) {
             System.out.println("entry: " + entry.getKey() + " " + entry.getValue().size() );
             String parquetFilePath = entry.getKey();
             List<WeatherMessage> writeBuffer = entry.getValue();
-//            ParquetFileWriter parquetWriter = parquetWriters.get(parquetFilePath);
-//            try {
-//                parquetWriter.write(writeBuffer);
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            } finally {
-//                writeBuffer.clear();
-//                messageBuffer.remove(parquetFilePath);
-////                    parquetWriter.close();
-//            }
             threads.add(new Thread(() -> {
                 ParquetFileWriter parquetWriter = parquetWriters.get(parquetFilePath);
                 try {
@@ -101,7 +120,7 @@ public class ArchiveHandler {
             try {
                 thread.join();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.out.println("Thread interrupted: " + e.getMessage());
             }
         }
 
