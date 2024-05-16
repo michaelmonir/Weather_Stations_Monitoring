@@ -8,7 +8,7 @@ import com.example.bitcask.Hashmap.MyMap;
 import com.example.bitcask.Message.ByteToMessageConverter;
 import com.example.bitcask.Message.Message;
 import com.example.bitcask.NewMerge.MergeScheduler;
-import com.example.bitcask.Recovery.RecoveryInformationUpdater;
+import com.example.bitcask.NewRecovery.RecoveryInformationUpdater;
 import com.example.bitcask.Segments.Segment;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,13 +35,18 @@ public class Bitcask {
     public Bitcask() {
         segments = new ArrayList<>();
         this.myMap = new MyMap();
-        segment = new Segment(SegmentIncreamenter.getAndIncreament());
+        int segmentIndex = SegmentIncreamenter.getAndIncreament();
+        segment = new Segment(segmentIndex);
         segments.add(segment);
+        new RecoveryInformationUpdater().addSegment(segmentIndex);
     }
 
     public Bitcask(List<Segment> segments) {
         this.segments = segments;
         this.segment = segments.get(segments.size() - 1);
+        this.myMap = new MyMap();
+        for (Segment segment : this.segments)
+            this.mergeWithMap(segment.getMyMap());
     }
 
     public static Bitcask getBitcask() {
@@ -106,8 +111,7 @@ public class Bitcask {
             int segmentIndex = SegmentIncreamenter.getAndIncreament();
 
             segment = new Segment(segmentIndex);
-            RecoveryInformationUpdater recoveryInformationUpdater = new RecoveryInformationUpdater();
-            recoveryInformationUpdater.addSegment(segmentIndex);
+            new RecoveryInformationUpdater().addSegment(segmentIndex);
 
             segments.add(segment);
         }

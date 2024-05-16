@@ -165,5 +165,23 @@ class BitcaskApplicationTests {
 		} catch (InterruptedException e) {
 		}
 	}
+
+	@Test
+	public void testBasicRecovery() {
+		BitcaskRunner.start(1, 1000_000L);
+		for (int i = 0; i < 1; i++)
+			BitcaskRunner.put(i);
+		for (int i = 0; i < 1; i++) {
+			Message message = BitcaskRunner.read(i);
+			Assertions.assertEquals(message.getS_no(), i);
+		}
+
+		BitcaskRunner.startAndRecover(1, 1000_000L);
+
+		for (int i = 0; i < 1; i++) {
+			Message message = BitcaskRunner.read(i);
+			Assertions.assertEquals(message.getS_no(), i);
+		}
+	}
 }
 

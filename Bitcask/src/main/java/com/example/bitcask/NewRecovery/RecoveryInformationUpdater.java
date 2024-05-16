@@ -1,15 +1,13 @@
-package com.example.bitcask.Recovery;
+package com.example.bitcask.NewRecovery;
 
 import com.example.bitcask.Exceptions.FileException;
-import com.example.bitcask.File.TextFileOperations;
+import com.example.bitcask.File.FileNameGetter;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class RecoveryInformationUpdater {
 
-    String recoveryFileName = "recoveryInformation.txt";
+    String recoveryFileName = FileNameGetter.getIndexesFileName();
 
     public void addSegment(int newSegmentIndex) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(recoveryFileName, true))) {

@@ -33,9 +33,8 @@ public class AtomicMergeOperations {
         list.add(this.resultSegment);
 
         List<Segment> bitcaskCurrentSegments = Bitcask.getBitcask().getSegments();
-        for (int i = lastSegmentIndex; i < bitcaskCurrentSegments.size(); i++) {
+        for (int i = lastSegmentIndex; i < bitcaskCurrentSegments.size(); i++)
             list.add(bitcaskCurrentSegments.get(i));
-        }
 
         Bitcask.getBitcask().setSegments(list);
     }
