@@ -5,7 +5,7 @@ import com.example.bitcask.File.BinaryFileOperations;
 import com.example.bitcask.File.FileNameGetter;
 import com.example.bitcask.Hashmap.MapEntry;
 import com.example.bitcask.Hashmap.MyMap;
-import com.example.bitcask.Message.ByteToMessageConverter;
+import Converters.Message.ByteToMessageConverter;
 import com.example.bitcask.Message.Message;
 import com.example.bitcask.NewRecovery.RecoveryInformationUpdater;
 import com.example.bitcask.Segments.Segment;
@@ -13,9 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Bitcask {

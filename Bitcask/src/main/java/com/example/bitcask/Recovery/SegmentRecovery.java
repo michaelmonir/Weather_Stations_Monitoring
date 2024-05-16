@@ -3,7 +3,7 @@ package com.example.bitcask.Recovery;
 import com.example.bitcask.Exceptions.FileException;
 import com.example.bitcask.File.BinaryFileOperations;
 import com.example.bitcask.File.FileNameGetter;
-import com.example.bitcask.Message.ByteToMessageConverter;
+import Converters.Message.ByteToMessageConverter;
 import com.example.bitcask.Message.Message;
 import com.example.bitcask.Segments.Segment;
 

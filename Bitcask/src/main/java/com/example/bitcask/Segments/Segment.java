@@ -4,9 +4,9 @@ import com.example.bitcask.File.BinaryFileOperations;
 import com.example.bitcask.File.FileNameGetter;
 import com.example.bitcask.Hashmap.MapEntry;
 import com.example.bitcask.Hashmap.MyMap;
-import com.example.bitcask.Message.ByteToMessageConverter;
+import Converters.Message.ByteToMessageConverter;
 import com.example.bitcask.Message.Message;
-import com.example.bitcask.Message.MessageToByteConverter;
+import Converters.Message.MessageToByteConverter;
 import lombok.Getter;
 
 public class Segment {
