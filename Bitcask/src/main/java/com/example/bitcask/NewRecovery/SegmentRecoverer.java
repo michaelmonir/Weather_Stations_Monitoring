@@ -1,7 +1,7 @@
 package com.example.bitcask.NewRecovery;
 
 import com.example.bitcask.Exceptions.FinishedReadingFilesException;
-import com.example.bitcask.File.ByteStreamReader;
+import com.example.bitcask.File.ByteStreamFiles.ByteStreamReader;
 import com.example.bitcask.File.FileNameGetter;
 import com.example.bitcask.Hashmap.MyMap;
 import com.example.bitcask.Message.ByteToMessageConverter;
