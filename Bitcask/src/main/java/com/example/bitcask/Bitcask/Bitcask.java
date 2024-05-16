@@ -7,7 +7,6 @@ import com.example.bitcask.Hashmap.MapEntry;
 import com.example.bitcask.Hashmap.MyMap;
 import com.example.bitcask.Message.ByteToMessageConverter;
 import com.example.bitcask.Message.Message;
-import com.example.bitcask.NewMerge.MergeScheduler;
 import com.example.bitcask.NewRecovery.RecoveryInformationUpdater;
 import com.example.bitcask.Segments.Segment;
 import lombok.Getter;
@@ -21,11 +20,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Bitcask {
 
+    @Getter
     private MyMap myMap;
     private static Bitcask simgletonBitcask;
-    private static int maxSegmentSize = 1;
-    private Segment segment;
-    private static int maxNumOfSegments = 1000000;
+    public static int maxSegmentSize = 1;
+    @Setter
+    @Getter
+    private Segment activeSegment;
+    public static int maxNumOfSegments = 1000000;
     @Getter
     @Setter
     private List<Segment> segments;
@@ -36,17 +38,17 @@ public class Bitcask {
         segments = new ArrayList<>();
         this.myMap = new MyMap();
         int segmentIndex = SegmentIncreamenter.getAndIncreament();
-        segment = new Segment(segmentIndex);
-        segments.add(segment);
+        activeSegment = new Segment(segmentIndex);
+        segments.add(activeSegment);
         new RecoveryInformationUpdater().addSegment(segmentIndex);
     }
 
     public Bitcask(List<Segment> segments) {
         this.segments = segments;
-        this.segment = segments.get(segments.size() - 1);
+        this.activeSegment = segments.get(segments.size() - 1);
         this.myMap = new MyMap();
         for (Segment segment : this.segments)
-            this.mergeWithMap(segment.getMyMap());
+            new BitcaskSegmentManager(this).mergeWithMap(segment.getMyMap());
     }
 
     public static Bitcask getBitcask() {
@@ -70,17 +72,14 @@ public class Bitcask {
     }
 
     public synchronized void write(Message message) {
-        BitcaskLocks.lockRead();
-
-        this.handleExceedingMaxSize();
-        this.handleMaxNumOfSegments();
+        new BitcaskSegmentManager(this).handleExceedingMaxSize();
+        new BitcaskSegmentManager(this).handleMaxNumOfSegments();
 
         try {
-            MapEntry mapEntry = this.segment.write(message);
+            MapEntry mapEntry = this.activeSegment.write(message);
             this.myMap.put(message.getStation_id(), mapEntry);
         } catch (BiggerTimestampExistsException e) {
         }
-        BitcaskLocks.unlockRead();
     }
 
     public Message read(Long stationId) {
@@ -92,34 +91,7 @@ public class Bitcask {
         String fileName = FileNameGetter.getFileName(fileIndex);
         byte[] bytes = BinaryFileOperations.readFromFile(fileName, offset);
 
-        ByteToMessageConverter byteToMessageConverter = new ByteToMessageConverter(bytes);
-
         BitcaskLocks.unlockRead();
-        return byteToMessageConverter.convert();
-    }
-
-    public void mergeWithMap(MyMap otherMap) {
-        Iterator it = otherMap.getIterator();
-        while (it.hasNext()) {
-            Map.Entry<Long, MapEntry> entry = (Map.Entry<Long, MapEntry>) it.next();
-            this.myMap.put(entry.getKey(), entry.getValue());
-        }
-    }
-
-    private void handleExceedingMaxSize() {
-        if (this.segment.getSize() >= maxSegmentSize) {
-            int segmentIndex = SegmentIncreamenter.getAndIncreament();
-
-            segment = new Segment(segmentIndex);
-            new RecoveryInformationUpdater().addSegment(segmentIndex);
-
-            segments.add(segment);
-        }
-    }
-
-    private void handleMaxNumOfSegments() {
-        if (this.segments.size() >= maxNumOfSegments) {
-            MergeScheduler.resume();
-        }
+        return new ByteToMessageConverter(bytes).convert();
     }
 }

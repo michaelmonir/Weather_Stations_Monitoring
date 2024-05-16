@@ -1,6 +1,7 @@
 package com.example.bitcask.NewMerge;
 
 import com.example.bitcask.Bitcask.Bitcask;
+import com.example.bitcask.Bitcask.BitcaskSegmentManager;
 import com.example.bitcask.Bitcask.SegmentIncreamenter;
 import com.example.bitcask.Segments.Segment;
 
@@ -24,7 +25,8 @@ public class Merger {
     }
 
     private void mergeWithBitcaskMap() {
-        Bitcask.getBitcask().mergeWithMap(this.resultSegment.getMyMap());
+        Bitcask bitcask = Bitcask.getBitcask();
+        new BitcaskSegmentManager(bitcask).mergeWithMap(this.resultSegment.getMyMap());
     }
 
     private void writeMergedFile() {
