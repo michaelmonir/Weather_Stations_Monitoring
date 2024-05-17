@@ -4,42 +4,37 @@ import com.example.bitcask.File.BinaryFileOperations;
 import com.example.bitcask.File.FileNameGetter;
 import com.example.bitcask.Hashmap.MapEntry;
 import com.example.bitcask.Hashmap.MyMap;
-import Converters.Message.ByteToMessageConverter;
 import com.example.bitcask.Message.Message;
-import Converters.Message.MessageToByteConverter;
+import com.example.bitcask.Converters.Message.MessageToByteConverter;
 import lombok.Getter;
 
 public class Segment {
 
     @Getter
-    private int segmentIndex;
+    private int index;
     @Getter
     private MyMap myMap;
     @Getter
     private int size;
 
-    public Segment(int segmentIndex) {
+    public Segment(int index) {
         this.size = 0;
-        this.segmentIndex = segmentIndex;
+        this.index = index;
         this.myMap = new MyMap();
     }
 
-    public Segment(int segmentIndex, MyMap myMap, int size) {
-        this.segmentIndex = segmentIndex;
+    public Segment(int index, MyMap myMap, int size) {
+        this.index = index;
         this.myMap = myMap;
         this.size = size;
     }
 
     public int writeToFileAndGetOffset(byte[] data) {
-        BinaryFileOperations.writeToFile(FileNameGetter.getFileName(this.segmentIndex), data);
+        BinaryFileOperations.writeToFile(FileNameGetter.getFileName(this.index), data);
 
         int ret = size;
         size += Message.MESSAGE_SIZE;
         return ret;
-    }
-
-    public boolean hasStation(long stationId) {
-        return this.myMap.containsKey(stationId);
     }
 
     public MapEntry write(Message message) {
@@ -48,21 +43,12 @@ public class Segment {
 
         int offset = this.writeToFileAndGetOffset(bytes);
 
-        return myMap.put(message.getStation_id(), message.getStatus_timestamp(), this.segmentIndex, offset);
+        return myMap.put(message.getStation_id(), message.getStatus_timestamp(), this.index, offset);
     }
 
     public MapEntry write(Long stationId, Long timeStamp, byte[] bytes) {
         int offset = this.writeToFileAndGetOffset(bytes);
 
-        return myMap.put(stationId, timeStamp, this.segmentIndex, offset);
-    }
-
-    public Message read(Long stationId) {
-        int offset = myMap.get(stationId).offset;
-        byte[] data = BinaryFileOperations
-                .readFromFile(FileNameGetter.getFileName(this.segmentIndex), offset);
-
-        ByteToMessageConverter byteToMessageConverter = new ByteToMessageConverter(data);
-        return byteToMessageConverter.convert();
+        return myMap.put(stationId, timeStamp, this.index, offset);
     }
 }

@@ -1,7 +1,7 @@
-package Converters.Hint;
+package com.example.bitcask.Converters.Hint;
 
-import Converters.ByteToDatatypeConverters;
-import com.example.bitcask.Recovery.Hint;
+import com.example.bitcask.Converters.ByteToDatatypeConverters;
+import com.example.bitcask.NewRecovery.Hint;
 
 public class ByteToHintConverter {
 
@@ -12,7 +12,7 @@ public class ByteToHintConverter {
     }
 
     public Hint convert() {
-        int stationId = reader.readInt();
+        Long stationId = reader.readLong();
         int fileIndex = reader.readInt();
         int offset = reader.readInt();
         Long timestamp = reader.readLong();

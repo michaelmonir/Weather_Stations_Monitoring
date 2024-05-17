@@ -1,16 +1,17 @@
-package com.example.bitcask.Recovery;
+package com.example.bitcask.NewRecovery;
 
 import lombok.Data;
 
 @Data
 public class Hint {
 
-    private int stationId;
+    private Long stationId;
     private int fileIndex;
     private int offset;
     private Long timestamp;
+    public static int HintSize = 20;
 
-    public Hint(int stationId, int fileIndex, int offset, Long timestamp) {
+    public Hint(Long stationId, int fileIndex, int offset, Long timestamp) {
         this.stationId = stationId;
         this.fileIndex = fileIndex;
         this.offset = offset;

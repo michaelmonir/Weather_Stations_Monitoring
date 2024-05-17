@@ -42,7 +42,7 @@ public class AtomicMergeOperations {
     private void updateUsedSegmentsFile() {
         List<Integer> segmentIndeces = new ArrayList<>();
         for (Segment segment : Bitcask.getBitcask().getSegments())
-            segmentIndeces.add(segment.getSegmentIndex());
+            segmentIndeces.add(segment.getIndex());
 
         TextFileAtmoicUpdator.writeList(segmentIndeces, FileNameGetter.getIndexesFileName());
     }

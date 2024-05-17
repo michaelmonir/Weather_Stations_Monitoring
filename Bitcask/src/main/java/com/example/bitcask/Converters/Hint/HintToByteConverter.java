@@ -1,8 +1,8 @@
-package Converters.Hint;
+package com.example.bitcask.Converters.Hint;
 
-import Converters.DatatypeToByteConverters;
+import com.example.bitcask.Converters.DatatypeToByteConverters;
 import com.example.bitcask.Message.Message;
-import com.example.bitcask.Recovery.Hint;
+import com.example.bitcask.NewRecovery.Hint;
 
 public class HintToByteConverter {
 

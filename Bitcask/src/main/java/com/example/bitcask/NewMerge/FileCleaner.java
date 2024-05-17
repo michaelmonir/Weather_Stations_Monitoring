@@ -12,8 +12,8 @@ public class FileCleaner {
     public static void cleanExtraFiles(Bitcask bitcask) {
         HashSet<String> files = new HashSet<>();
         for (Segment s : bitcask.getSegments()) {
-            files.add(FileNameGetter.getFileName(s.getSegmentIndex()));
-            files.add(FileNameGetter.getHintFileName(s.getSegmentIndex()));
+            files.add(FileNameGetter.getFileName(s.getIndex()));
+            files.add(FileNameGetter.getHintFileName(s.getIndex()));
         }
         FileHashSetDeletion.deleteFiles(files);
     }

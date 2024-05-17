@@ -1,4 +1,4 @@
-package Converters;
+package com.example.bitcask.Converters;
 
 public class ByteToDatatypeConverters {
 

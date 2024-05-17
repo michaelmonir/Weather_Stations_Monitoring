@@ -15,7 +15,7 @@ public class SegmentIncreamenter {
     public static void recover(List<Segment> segmentList) {
         int segmentNumber = 1;
         for (Segment segment : segmentList)
-            segmentNumber = Math.max(segmentNumber, segment.getSegmentIndex());
+            segmentNumber = Math.max(segmentNumber, segment.getIndex());
         atomicSegmentNumber.set(segmentNumber);
     }
 }

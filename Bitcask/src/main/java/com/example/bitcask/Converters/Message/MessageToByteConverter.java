@@ -1,6 +1,6 @@
-package Converters.Message;
+package com.example.bitcask.Converters.Message;
 
-import Converters.DatatypeToByteConverters;
+import com.example.bitcask.Converters.DatatypeToByteConverters;
 import com.example.bitcask.Message.Message;
 
 public class MessageToByteConverter {

@@ -5,7 +5,7 @@ import com.example.bitcask.File.BinaryFileOperations;
 import com.example.bitcask.File.FileNameGetter;
 import com.example.bitcask.Hashmap.MapEntry;
 import com.example.bitcask.Hashmap.MyMap;
-import Converters.Message.ByteToMessageConverter;
+import com.example.bitcask.Converters.Message.ByteToMessageConverter;
 import com.example.bitcask.Message.Message;
 import com.example.bitcask.NewRecovery.RecoveryInformationUpdater;
 import com.example.bitcask.Segments.Segment;
@@ -21,16 +21,17 @@ public class Bitcask {
     @Getter
     private MyMap myMap;
     private static Bitcask simgletonBitcask;
-    public static int maxSegmentSize = 1;
+    @Setter
+    @Getter
+    private static int maxSegmentSize = 1;
     @Setter
     @Getter
     private Segment activeSegment;
+    @Setter
     public static int maxNumOfSegments = 1000000;
     @Getter
     @Setter
     private List<Segment> segments;
-    public static AtomicInteger bitcaskDebugger = new AtomicInteger(0);
-    public static AtomicInteger getBitcaskDebuggerStatus = new AtomicInteger(0);
 
     public Bitcask() {
         segments = new ArrayList<>();
@@ -59,14 +60,6 @@ public class Bitcask {
     public static Bitcask setBitcask(Bitcask bitcask) {
         simgletonBitcask = bitcask;
         return simgletonBitcask;
-    }
-
-    public static void setMaxSegmentSize(int maxSegmentSize) {
-        Bitcask.maxSegmentSize = maxSegmentSize;
-    }
-
-    public static void setMaxNumOfSegments(int maxNumberOfSegments) {
-        Bitcask.maxNumOfSegments = maxNumberOfSegments;
     }
 
     public synchronized void write(Message message) {
