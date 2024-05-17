@@ -9,7 +9,7 @@ import com.example.bitcask.Segments.Segment;
 import java.util.Iterator;
 import java.util.Map;
 
-public class HintWriter {
+public class HintWriter implements Runnable {
 
     private Segment segment;
     private ByteStreamWriter byteStreamWriter;
@@ -20,6 +20,7 @@ public class HintWriter {
         this.byteStreamWriter = new ByteStreamWriter(Hint.HintSize, hintFileName);
     }
 
+    @Override
     public void run() {
         Iterator iterator = this.segment.getMyMap().getIterator();
 

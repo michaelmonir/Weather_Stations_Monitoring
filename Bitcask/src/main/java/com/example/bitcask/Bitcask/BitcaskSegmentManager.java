@@ -33,9 +33,8 @@ public class BitcaskSegmentManager {
     }
 
     public void handleMaxNumOfSegments() {
-        if (bitcask.getSegments().size() >= Bitcask.maxNumOfSegments) {
+        if (bitcask.getSegments().size() >= Bitcask.maxNumOfSegments)
             MergeScheduler.resume();
-        }
     }
 
     public void mergeWithMap(MyMap otherMap) {
@@ -50,6 +49,7 @@ public class BitcaskSegmentManager {
         int sz = bitcask.getSegments().size();
         if (sz == 0) return;
         Segment segment = bitcask.getSegments().get(sz - 1);
-        new HintWriter(segment).run();
+//        new HintWriter(segment).run();
+        new Thread(new HintWriter(segment)).start();
     }
 }

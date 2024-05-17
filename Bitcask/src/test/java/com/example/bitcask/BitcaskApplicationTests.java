@@ -172,18 +172,19 @@ class BitcaskApplicationTests {
 
 	@Test
 	public void testBasicRecovery() {
+		int iterations = 1000;
 		this.clearFilesBeforeTest();
 		BitcaskRunner.start(1, 1000_000L);
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < iterations; i++)
 			BitcaskRunner.put(i);
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < iterations; i++) {
 			Message message = BitcaskRunner.read(i);
 			Assertions.assertEquals(message.getS_no(), i);
 		}
 
 		BitcaskRunner.startAndRecover(1, 1000_000L);
 
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < iterations; i++) {
 			Message message = BitcaskRunner.read(i);
 			Assertions.assertEquals(message.getS_no(), i);
 		}
