@@ -11,12 +11,12 @@ public class HintToByteConverter {
 
     public HintToByteConverter(Hint hint) {
         this.hint = hint;
-        this.writer = new DatatypeToByteConverters(Message.MESSAGE_SIZE);
+        this.writer = new DatatypeToByteConverters(Hint.HintSize);
     }
 
     public byte[] convert() {
         writer.writeLong(hint.getStationId());
-        writer.writeLong(hint.getFileIndex());
+        writer.writeInt(hint.getFileIndex());
         writer.writeInt(hint.getOffset());
         writer.writeLong(hint.getTimestamp());
 

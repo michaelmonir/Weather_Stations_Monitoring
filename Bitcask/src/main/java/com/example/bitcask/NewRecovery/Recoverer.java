@@ -1,6 +1,8 @@
 package com.example.bitcask.NewRecovery;
 
 import com.example.bitcask.Bitcask.Bitcask;
+import com.example.bitcask.File.FileNameGetter;
+import com.example.bitcask.File.TextFileOperations;
 import com.example.bitcask.Segments.Segment;
 
 import java.util.ArrayList;
@@ -18,10 +20,17 @@ public class Recoverer {
     private List<Segment> getSegments(List<Integer> segmentIndices) {
         List<Segment> segments = new ArrayList<>();
         for (int index : segmentIndices) {
-//            Segment segment = new SegmentWithoutHintRecoverer(index).recover();
-            Segment segment = new SegmentWithHintRecoverer(index).recover();
+            Segment segment = this.pickAndrunRecoveryChoice(index);
             segments.add(segment);
         }
         return segments;
+    }
+
+    private Segment pickAndrunRecoveryChoice(int index) {
+        if (TextFileOperations.fileExists(FileNameGetter.getHintFileName(index))) {
+            return new SegmentWithHintRecoverer(index).recover();
+        } else {
+            return new SegmentWithoutHintRecoverer(index).recover();
+        }
     }
 }

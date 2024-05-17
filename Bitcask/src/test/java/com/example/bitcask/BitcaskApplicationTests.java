@@ -3,7 +3,10 @@ package com.example.bitcask;
 import com.example.bitcask.Bitcask.Bitcask;
 import com.example.bitcask.Bitcask.BitcaskRunner;
 import com.example.bitcask.Exceptions.IdDoesNotExistException;
+import com.example.bitcask.File.FileHashSetDeletion;
+import com.example.bitcask.File.FileNameGetter;
 import com.example.bitcask.Message.Message;
+import com.example.bitcask.NewMerge.FileCleaner;
 import com.example.bitcask.NewMerge.MergeScheduler;
 import com.example.bitcask.NewMerge.Merger;
 import org.junit.jupiter.api.Assertions;
@@ -12,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashSet;
 
 @SpringBootTest
 class BitcaskApplicationTests {
@@ -168,20 +172,26 @@ class BitcaskApplicationTests {
 
 	@Test
 	public void testBasicRecovery() {
+		this.clearFilesBeforeTest();
 		BitcaskRunner.start(1, 1000_000L);
-		for (int i = 0; i < 1; i++)
+		for (int i = 0; i < 2; i++)
 			BitcaskRunner.put(i);
-		for (int i = 0; i < 1; i++) {
+		for (int i = 0; i < 2; i++) {
 			Message message = BitcaskRunner.read(i);
 			Assertions.assertEquals(message.getS_no(), i);
 		}
 
 		BitcaskRunner.startAndRecover(1, 1000_000L);
 
-		for (int i = 0; i < 1; i++) {
+		for (int i = 0; i < 2; i++) {
 			Message message = BitcaskRunner.read(i);
 			Assertions.assertEquals(message.getS_no(), i);
 		}
+	}
+
+	private void clearFilesBeforeTest() {
+		FileHashSetDeletion.deleteFiles(new HashSet<>());
+		FileCleaner.cleanFile(FileNameGetter.getIndexesFileName());
 	}
 }
 

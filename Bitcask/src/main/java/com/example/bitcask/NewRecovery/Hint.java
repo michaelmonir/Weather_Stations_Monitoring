@@ -9,7 +9,7 @@ public class Hint {
     private int fileIndex;
     private int offset;
     private Long timestamp;
-    public static int HintSize = 20;
+    public static int HintSize = 24;
 
     public Hint(Long stationId, int fileIndex, int offset, Long timestamp) {
         this.stationId = stationId;
