@@ -4,7 +4,7 @@ import com.example.bitcask.Hashmap.MapEntry;
 import com.example.bitcask.Hashmap.MyMap;
 import com.example.bitcask.NewMerge.MergeScheduler;
 import com.example.bitcask.NewRecovery.HintWriter;
-import com.example.bitcask.NewRecovery.RecoveryInformationUpdater;
+import com.example.bitcask.NewRecovery.IndicesKeeper;
 import com.example.bitcask.Segments.Segment;
 
 import java.util.Iterator;
@@ -25,7 +25,7 @@ public class BitcaskSegmentManager {
             Segment activeSegment = new Segment(segmentIndex);
             bitcask.setActiveSegment(activeSegment);
 
-            new RecoveryInformationUpdater().addSegment(segmentIndex);
+            new IndicesKeeper().addSegment(segmentIndex);
             this.writeSegmentToHintFile();
 
             bitcask.getSegments().add(activeSegment);

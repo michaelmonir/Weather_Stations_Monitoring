@@ -8,13 +8,13 @@ import com.example.bitcask.Converters.Message.ByteToMessageConverter;
 import com.example.bitcask.Message.Message;
 import com.example.bitcask.Segments.Segment;
 
-public class SegmentRecoverer {
+public class SegmentWithoutHintRecoverer {
 
     MyMap myMap = new MyMap();
     private int segmentIndex;
     private ByteStreamReader streamReader;
 
-    public SegmentRecoverer(int fileIndex) {
+    public SegmentWithoutHintRecoverer(int fileIndex) {
         this.segmentIndex = fileIndex;
         this.streamReader = new ByteStreamReader(Message.MESSAGE_SIZE, FileNameGetter.getFileName(fileIndex));
     }

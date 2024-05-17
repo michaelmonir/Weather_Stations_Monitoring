@@ -7,14 +7,13 @@ import com.example.bitcask.Hashmap.MapEntry;
 import com.example.bitcask.Hashmap.MyMap;
 import com.example.bitcask.Converters.Message.ByteToMessageConverter;
 import com.example.bitcask.Message.Message;
-import com.example.bitcask.NewRecovery.RecoveryInformationUpdater;
+import com.example.bitcask.NewRecovery.IndicesKeeper;
 import com.example.bitcask.Segments.Segment;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Bitcask {
 
@@ -39,7 +38,7 @@ public class Bitcask {
         int segmentIndex = SegmentIncreamenter.getAndIncreament();
         activeSegment = new Segment(segmentIndex);
         segments.add(activeSegment);
-        new RecoveryInformationUpdater().addSegment(segmentIndex);
+        new IndicesKeeper().addSegment(segmentIndex);
     }
 
     public Bitcask(List<Segment> segments) {

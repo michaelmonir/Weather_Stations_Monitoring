@@ -4,15 +4,14 @@ import com.example.bitcask.Exceptions.FileException;
 import com.example.bitcask.File.FileNameGetter;
 import com.example.bitcask.File.TextFileOperations;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SegmentIndicesRecoverer {
+public class IndicesKeeper {
 
     private List<Integer> segmentIndices = new ArrayList<>();
+    String recoveryFileName = FileNameGetter.getIndexesFileName();
 
     public List<Integer> recover() {
         String indexesFileName = FileNameGetter.getIndexesFileName();
@@ -21,6 +20,16 @@ public class SegmentIndicesRecoverer {
         String indexesFilePath = FileNameGetter.getIndexesFileName();
         this.getNumbersFromReader(indexesFilePath);
         return segmentIndices;
+    }
+
+    public void addSegment(int newSegmentIndex) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(recoveryFileName, true))) {
+            writer.write(Integer.toString(newSegmentIndex));
+            writer.newLine();
+            writer.flush();
+        } catch (IOException e) {
+            throw new FileException();
+        }
     }
 
     private void getNumbersFromReader(String filePath) {

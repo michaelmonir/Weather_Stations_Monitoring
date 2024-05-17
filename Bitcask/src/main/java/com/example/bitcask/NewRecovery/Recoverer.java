@@ -9,7 +9,7 @@ import java.util.List;
 public class Recoverer {
 
     public Bitcask recover() {
-        List<Integer> segmentIndices = new SegmentIndicesRecoverer().recover();
+        List<Integer> segmentIndices = new IndicesKeeper().recover();
         List<Segment> segments = this.getSegments(segmentIndices);
 
         return new Bitcask(segments);
@@ -18,7 +18,8 @@ public class Recoverer {
     private List<Segment> getSegments(List<Integer> segmentIndices) {
         List<Segment> segments = new ArrayList<>();
         for (int index : segmentIndices) {
-            Segment segment = new SegmentRecoverer(index).recover();
+//            Segment segment = new SegmentWithoutHintRecoverer(index).recover();
+            Segment segment = new SegmentWithHintRecoverer(index).recover();
             segments.add(segment);
         }
         return segments;
