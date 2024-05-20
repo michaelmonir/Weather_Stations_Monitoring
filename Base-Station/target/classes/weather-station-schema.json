@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "station_id": { "type": "integer" },
+    "s_no": { "type": "integer" },
+    "battery_status": { "type": "string", "enum": ["low", "medium", "high"] },
+    "status_timestamp": { "type": "number", "format": "date-time"},
+    "weather": {
+      "type": "object",
+      "properties": {
+        "humidity": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "temperature": { "type": "integer" },
+        "wind_speed": { "type": "integer" }
+      },
+      "required": ["humidity", "temperature", "wind_speed"]
+    }
+  },
+  "required": ["station_id", "s_no", "battery_status", "status_timestamp", "weather"]
+}
