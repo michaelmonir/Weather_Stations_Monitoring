@@ -3,6 +3,9 @@ parquet-archive
 target
 
 KafkaProducer
+.attach_pid33925
+.attach_pid38926
+
 
 *.class
 *.parquet
