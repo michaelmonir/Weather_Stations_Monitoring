@@ -12,7 +12,7 @@ KafkaProducer
 *.parquet.crc
 *.log
 *.iml
-*.xml
+#.xml
 *.lst
 *.out
 *.jar
