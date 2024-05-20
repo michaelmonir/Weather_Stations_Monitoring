@@ -53,6 +53,7 @@ public class BinaryFileOperations {
         try {
             return new FileOutputStream(fileName, append);
         } catch (IOException e) {
+            e.printStackTrace();
             throw new FileException();
         }
     }

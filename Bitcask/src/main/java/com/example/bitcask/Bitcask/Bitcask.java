@@ -1,32 +1,52 @@
 package com.example.bitcask.Bitcask;
 
-import com.example.bitcask.Exceptions.NoMessageWithThisIdException;
+import com.example.bitcask.Exceptions.BiggerTimestampExistsException;
+import com.example.bitcask.File.BinaryFileOperations;
+import com.example.bitcask.File.FileNameGetter;
+import com.example.bitcask.Hashmap.MapEntry;
+import com.example.bitcask.Hashmap.MyMap;
+import com.example.bitcask.Converters.Message.ByteToMessageConverter;
 import com.example.bitcask.Message.Message;
-import com.example.bitcask.Message.MessageToByteConverter;
-import com.example.bitcask.Recovery.RecoveryInformationUpdater;
+import com.example.bitcask.NewRecovery.IndicesKeeper;
 import com.example.bitcask.Segments.Segment;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Bitcask {
 
-    private static Bitcask simgletonBitcask;
-    private final int maxSegmentSize = 100;
-    private Segment segment;
     @Getter
+    private MyMap myMap;
+    private static Bitcask simgletonBitcask;
+    @Setter
+    @Getter
+    private static int maxSegmentSize = 1;
+    @Setter
+    @Getter
+    private Segment activeSegment;
+    @Setter
+    public static int maxNumOfSegments = 1000000;
+    @Getter
+    @Setter
     private List<Segment> segments;
 
     public Bitcask() {
         segments = new ArrayList<>();
-        segment = new Segment(SegmentIncreamenter.getAndIncreament());
-        segments.add(segment);
+        this.myMap = new MyMap();
+        int segmentIndex = SegmentIncreamenter.getAndIncreament();
+        activeSegment = new Segment(segmentIndex);
+        segments.add(activeSegment);
+        new IndicesKeeper().addSegment(segmentIndex);
     }
 
     public Bitcask(List<Segment> segments) {
         this.segments = segments;
-        this.segment = segments.get(segments.size() - 1);
+        this.activeSegment = segments.get(segments.size() - 1);
+        this.myMap = new MyMap();
+        for (Segment segment : this.segments)
+            new BitcaskSegmentManager(this).mergeWithMap(segment.getMyMap());
     }
 
     public static Bitcask getBitcask() {
@@ -41,38 +61,27 @@ public class Bitcask {
         return simgletonBitcask;
     }
 
-    public void write(Message message) {
-        this.handleExceedingMaxSize();
-        // this line is put at the first of the function to handle scenarios when server fails during recovery
+    public synchronized void write(Message message) {
+        new BitcaskSegmentManager(this).handleExceedingMaxSize();
+        new BitcaskSegmentManager(this).handleMaxNumOfSegments();
 
-        MessageToByteConverter messageToByteConverter = new MessageToByteConverter(message);
-        byte[] data = messageToByteConverter.convert();
-
-        this.segment.write(message.getStation_id(), data);
+        try {
+            MapEntry mapEntry = this.activeSegment.write(message);
+            this.myMap.put(message.getStation_id(), mapEntry);
+        } catch (BiggerTimestampExistsException e) {
+        }
     }
 
     public Message read(Long stationId) {
-        Segment segment = getSegmentOfWrite(stationId);
-        return segment.read(stationId);
-    }
+        MapEntry mapEntry = myMap.get(stationId); // get first to make sure it is already present
 
-    private Segment getSegmentOfWrite(long stationId) {
-        for (int i = segments.size() - 1; i >= 0; i--) {
-            if (segments.get(i).hasStation(stationId))
-                return segments.get(i);
-        }
-        throw new NoMessageWithThisIdException();
-    }
+        BitcaskLocks.lockRead();
+        int fileIndex = mapEntry.fileIndex, offset = mapEntry.offset;
 
-    private void handleExceedingMaxSize() {
-        if (this.segment.getSize() >= maxSegmentSize) {
-            int segmentIndex = SegmentIncreamenter.getAndIncreament();
+        String fileName = FileNameGetter.getFileName(fileIndex);
+        byte[] bytes = BinaryFileOperations.readFromFile(fileName, offset);
 
-            segment = new Segment(segmentIndex);
-            RecoveryInformationUpdater recoveryInformationUpdater = new RecoveryInformationUpdater();
-            recoveryInformationUpdater.addSegment(segmentIndex);
-
-            segments.add(segment);
-        }
+        BitcaskLocks.unlockRead();
+        return new ByteToMessageConverter(bytes).convert();
     }
 }
