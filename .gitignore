@@ -1,0 +1,17 @@
+parquet-archive
+./.idea
+target
+
+*.class
+*.parquet
+*.parquet.crc
+*.log
+*.iml
+*.xml
+*.lst
+*.out
+*.jar
+*.MF
+*.properties
+classpath.txt
+

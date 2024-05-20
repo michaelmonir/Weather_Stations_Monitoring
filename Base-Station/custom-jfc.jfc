@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration version="2.0" label="custom-jfc">
+
+  <event name="jdk.SocketRead">
+    <setting name="enabled">true</setting>
+    <setting name="stackTrace">true</setting>
+    <setting name="threshold">20 ns</setting>
+  </event>
+  <event name="jdk.ClassLoaderStatistics">
+    <setting name="enabled">true</setting>
+  </event>
+
+  <event name="jdk.SocketWrite">
+    <setting name="enabled">true</setting>
+    <setting name="stackTrace">true</setting>
+    <setting name="threshold">20 ns</setting>
+  </event>
+
+
+  <event name="jdk.FileRead">
+    <setting name="enabled">true</setting>
+    <setting name="stackTrace">true</setting>
+    <setting name="threshold">20 ns</setting>
+  </event>
+
+  <event name="jdk.FileForce">
+    <setting name="enabled">true</setting>
+    <setting name="stackTrace">true</setting>
+    <setting name="threshold">20 ns</setting>
+  </event>
+
+  <event name="jdk.FileWrite">
+    <setting name="enabled">true</setting>
+    <setting name="stackTrace">true</setting>
+    <setting name="threshold">20 ns</setting>
+  </event>
+
+
+  <event name="jdk.ObjectAllocationOutsideTLAB">
+    <setting name="enabled">true</setting>
+  </event>
+
+  <event name="jdk.ObjectAllocationInNewTLAB">
+    <setting name="enabled">true</setting>
+  </event>
+  <event name="jdk.ObjectCount">
+    <setting name="enabled">true</setting>
+    <setting name="period">2 ms</setting>
+  </event>
+
+  <event name="jdk.GCPhasePause">
+    <setting name="enabled">true</setting>
+  </event>
+
+  <event name="jdk.GarbageCollection">
+    <setting name="enabled">true</setting>
+    <setting name="threshold">20 ns</setting>
+  </event>
+
+  <event name="jdk.G1HeapSummary">
+    <setting name="enabled">true</setting>
+  </event>
+
+  <event name="jdk.ClassLoad">
+              <setting name="enabled">true</setting>
+              <setting name="stackTrace">true</setting>
+              <setting name="threshold">20 ms</setting>
+          </event>
+          <event name="jdk.ClassLoadingStatistics">
+              <setting name="enabled">true</setting>
+              <setting name="period">1000 ms</setting>
+          </event>
+          <event name="jdk.ObjectCount">
+              <setting name="enabled">true</setting>
+              <setting name="period">1 s</setting>
+          </event>
+          <event name="jdk.ClassHistogram">
+              <setting name="enabled">true</setting>
+          </event>
+          <event name="jdk.ClassLoaderStatistics">
+              <setting name="enabled">true</setting>
+              <setting name="period">everyChunk</setting>
+          </event>
+          <event name="jdk.ObjectAllocationInNewTLAB">
+              <setting name="enabled">true</setting>
+              <setting name="stackTrace">true</setting>
+          </event>
+          <event name="jdk.ObjectAllocationOutsideTLAB">
+              <setting name="enabled">true</setting>
+              <setting name="stackTrace">true</setting>
+          </event>
+          <event name="jdk.PhysicalMemory">
+              <setting name="enabled">true</setting>
+              <setting name="period">1 s</setting>
+          </event>
+
+</configuration>
