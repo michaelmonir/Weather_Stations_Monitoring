@@ -11,7 +11,6 @@ import java.io.IOException;
 public class ParquetFileReader {
 
 
-
 //    public static void main(String[] args) throws IOException {
 //        String parquetFilePath = "/home/ahmed/Desktop/Weather_Stations_Monitoring/parquet-archive/0/1970-01-19_0.parquet";
 //        Configuration conf = new Configuration();

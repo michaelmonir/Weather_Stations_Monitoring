@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ParquetReader {
-    private static final String ARCHIVE_PATH="/home/ahmed/Desktop/Weather_Stations_Monitoring/parquet-archive";
+    private static final String ARCHIVE_PATH = "/home/ahmed/Desktop/Weather_Stations_Monitoring/parquet-archive";
     private final SparkSession spark;
     private final StructType schema = new StructType()
             .add("stationId", DataTypes.IntegerType)
@@ -51,8 +51,9 @@ public class ParquetReader {
             return Collections.emptyList();
         }
     }
+
     public List<Row> readAllParquetFiles() {
-        Dataset<Row> parquetFile = spark.read().schema(schema).parquet(ARCHIVE_PATH+"/*"+"/" + "*.parquet");
+        Dataset<Row> parquetFile = spark.read().schema(schema).parquet(ARCHIVE_PATH + "/*" + "/*/" + "*.parquet");
 
         // Debugging: Show schema and count rows
         parquetFile.show();
@@ -60,14 +61,16 @@ public class ParquetReader {
         parquetFile.printSchema();
 
         long rowCount = parquetFile.count();
+        System.out.println("Number of rows: " + rowCount);
         return parquetFile.collectAsList();
     }
+
     //function to read all parquet files in the archive for a specific station
     public List<Row> readAllParquetFilesForStation(int stationId) {
         String stationPath = ARCHIVE_PATH + "/" + stationId;
         Dataset<Row> parquetFile = spark.read()
                 .schema(schema)
-                        .parquet(stationPath);
+                .parquet(stationPath);
         return parquetFile.collectAsList();
     }
 
@@ -75,14 +78,14 @@ public class ParquetReader {
         spark.close();
     }
 
-//    public static void main(String[] args) {
-//        ParquetReader reader = new ParquetReader();
-//        List<Row> rows = reader.readAllParquetFiles(ARCHIVE_PATH);
-//        System.out.println("Reading all parquet files in the archive");
-//        System.out.println(rows.size() + " rows found");
-//        for (Row row : rows) {
-//            System.out.println(row);
-//        }
-//        reader.close();
-//    }
+    public static void main(String[] args) {
+        ParquetReader reader = new ParquetReader();
+        List<Row> rows = reader.readAllParquetFiles(ARCHIVE_PATH);
+        System.out.println("Reading all parquet files in the archive");
+        System.out.println(rows.size() + " rows found");
+        for (Row row : rows) {
+            System.out.println(row);
+        }
+        reader.close();
+    }
 }

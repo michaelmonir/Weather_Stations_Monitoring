@@ -17,10 +17,10 @@ public class HadoopArchiveHandler implements Archiver {
 
     private final String archivePath;
     private final int batchSize;
-    private final List<WeatherMessage> messageBuffer =new ArrayList<>();
+    private final List<WeatherMessage> messageBuffer = new ArrayList<>();
     private final Map<String, ParquetFileWriter> parquetWriters = new HashMap<>();
 
-    private final Map<Integer,List<String>> fileMap = new HashMap<>();
+    private final Map<Integer, List<String>> fileMap = new HashMap<>();
 
     public HadoopArchiveHandler(String archivePath, int batchSize) throws IOException {
         this.archivePath = archivePath;
@@ -76,10 +76,9 @@ public class HadoopArchiveHandler implements Archiver {
     }
 
 
+    private void writeBufferToParquet(List<WeatherMessage> buffer) {
 
-    private void writeBufferToParquet(List<WeatherMessage> buffer){
-
-        Map <String, List<WeatherMessage>> messageBuffer = new HashMap<>();
+        Map<String, List<WeatherMessage>> messageBuffer = new HashMap<>();
 
         for (WeatherMessage message : buffer) {
             String parquetFilePath = getParquetFilePath(message);
@@ -97,7 +96,7 @@ public class HadoopArchiveHandler implements Archiver {
 
         List<Thread> threads = new ArrayList<>();
         for (Map.Entry<String, List<WeatherMessage>> entry : messageBuffer.entrySet()) {
-            System.out.println("entry: " + entry.getKey() + " " + entry.getValue().size() );
+            System.out.println("entry: " + entry.getKey() + " " + entry.getValue().size());
             String parquetFilePath = entry.getKey();
             List<WeatherMessage> writeBuffer = entry.getValue();
             threads.add(new Thread(() -> {
@@ -126,6 +125,7 @@ public class HadoopArchiveHandler implements Archiver {
 
 
     }
+
     public void close() throws IOException {
         for (ParquetFileWriter writer : parquetWriters.values()) {
             writer.close();

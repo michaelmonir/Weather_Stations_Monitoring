@@ -11,6 +11,7 @@ import java.util.Properties;
 
 public class KafkaMessageConsumer {
     private final KafkaConsumer<String, String> consumer;
+
     public KafkaMessageConsumer(String topicName, String bootstrapServers) {
 
         Properties props = new Properties();
@@ -29,7 +30,7 @@ public class KafkaMessageConsumer {
 
     public List<String> consumeMessages() {
         ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
-        List <String> messages = new ArrayList<>();
+        List<String> messages = new ArrayList<>();
         for (ConsumerRecord<String, String> record : records) {
             messages.add(record.value());
         }

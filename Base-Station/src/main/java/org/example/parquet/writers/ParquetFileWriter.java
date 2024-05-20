@@ -44,7 +44,7 @@ public class ParquetFileWriter {
         if (path.getFileSystem(conf).exists(path)) {
             try (ParquetReader<Group> reader = ParquetReader.builder(
                     new GroupReadSupport()
-                    , path).withConf(conf).build()){
+                    , path).withConf(conf).build()) {
                 groups = new ArrayList<>();
                 Group group;
                 while ((group = reader.read()) != null) {
@@ -63,7 +63,7 @@ public class ParquetFileWriter {
         if (groups != null) {
             for (Group group : groups) {
                 GenericRecord record = convertToAvroRecord(group);
-                writer.write( record);
+                writer.write(record);
             }
         }
     }

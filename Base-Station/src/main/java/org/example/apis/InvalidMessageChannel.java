@@ -5,6 +5,7 @@ import com.networknt.schema.ValidationMessage;
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.example.models.InvalidMessage;
+
 import java.util.*;
 
 public class InvalidMessageChannel {

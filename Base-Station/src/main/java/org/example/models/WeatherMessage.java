@@ -35,6 +35,7 @@ public class WeatherMessage implements Serializable {
 
     @JsonProperty("weather")
     private WeatherData weather;
+
     public static WeatherMessage fromJson(String message) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -71,16 +72,6 @@ public class WeatherMessage implements Serializable {
         );
     }
 
-    @Data
-    public static class WeatherData implements Serializable {
-        @JsonProperty("humidity")
-        private int humidity;
-        @JsonProperty("temperature")
-        private int temperature;
-        @JsonProperty("wind_speed")
-        private int windSpeed;
-    }
-
     public Group toParquetGroup(MessageType schema) {
         GroupFactory groupFactory = new SimpleGroupFactory(schema);
         Group weatherStatusGroup = groupFactory.newGroup();
@@ -104,5 +95,15 @@ public class WeatherMessage implements Serializable {
         avroRecord.put("temperature", weather.temperature);
         avroRecord.put("wind_speed", weather.windSpeed);
         return avroRecord;
+    }
+
+    @Data
+    public static class WeatherData implements Serializable {
+        @JsonProperty("humidity")
+        private int humidity;
+        @JsonProperty("temperature")
+        private int temperature;
+        @JsonProperty("wind_speed")
+        private int windSpeed;
     }
 }
