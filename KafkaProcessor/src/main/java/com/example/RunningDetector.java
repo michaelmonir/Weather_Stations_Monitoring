@@ -63,7 +63,7 @@ public class RunningDetector {
                                 return null;
                             }
 
-                            return """
+                            return String.format("""
                                     {
                                         "message": "Rain alert",
                                         "station_id": %d,
@@ -72,17 +72,20 @@ public class RunningDetector {
                                         "timestamp": %d,
                                         "humidity": %s
                                     }
-                                    """.formatted(stationId, sNo, batteryStatus, timestamp, humidity);
+                                    """, stationId, sNo, batteryStatus, timestamp, humidity);
                         }
                         )
                 .peek((key, value) -> System.out.println("Rain alert: " + value))
                 .filter((key, value) -> value != null)
                 .to(outputTopic, Produced.with(stringSerde, stringSerde));
+
         KafkaStreams streams = new KafkaStreams(builder.build(), properties);
         streams.start();
     }
 
+
     public void stop() {
-        // Add logic to gracefully stop Kafka Streams application
+
     }
+
 }
