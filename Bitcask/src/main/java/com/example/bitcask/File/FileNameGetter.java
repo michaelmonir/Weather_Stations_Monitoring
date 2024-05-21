@@ -17,4 +17,8 @@ public class FileNameGetter {
     public static String getIndexesFileName() {
         return "indexes.txt";
     }
+
+    public static String getRoot() {
+        return "Files/";
+    }
 }

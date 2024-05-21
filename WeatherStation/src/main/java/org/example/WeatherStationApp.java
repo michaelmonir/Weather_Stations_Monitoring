@@ -1,10 +1,14 @@
-package org.example.WeatherStation;
+package org.example;
+import org.example.weatherstation.OpenMeteoWeatherStation;
+import org.example.weatherstation.WeatherStatusMsg;
+import org.example.weatherstation.Utilities;
+
 import org.example.kafka.Producer;
-
-public class WeatherStation {
+public class WeatherStationApp {
     public static void main(String[] args) throws Exception {
-
-        if (false) {
+        int flag = Integer.parseInt(args[0]);
+        System.out.println("Flag: " + flag);
+        if (flag == 1) {
             OpenMeteoWeatherStation openMeteoWeather = new OpenMeteoWeatherStation();
             while (true) {
                 openMeteoWeather.send();

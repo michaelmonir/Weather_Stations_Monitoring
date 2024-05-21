@@ -1,4 +1,4 @@
-package org.example.WeatherStation;
+package org.example.weatherstation;
 
 
 import org.example.kafka.Producer;
@@ -59,7 +59,10 @@ public class OpenMeteoWeatherStation {
         if (temp != null) producer.send(temp);
         Long endTime = System.currentTimeMillis();
         long apiCallTime = endTime - startTime;
-        Thread.sleep(1000 - apiCallTime);
+        if (apiCallTime < 1000)
+            Thread.sleep(1000 - apiCallTime);
+        else
+            System.out.println("API call took longer than 1 second");
     }
 
 //    public static void main(String[] args) throws Exception {

@@ -2,12 +2,17 @@ parquet-archive
 ./.idea
 target
 
+KafkaProducer
+.attach_pid33925
+.attach_pid38926
+
+
 *.class
 *.parquet
 *.parquet.crc
 *.log
 *.iml
-*.xml
+#.xml
 *.lst
 *.out
 *.jar

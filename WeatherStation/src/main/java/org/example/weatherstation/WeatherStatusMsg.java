@@ -1,9 +1,11 @@
-package org.example.WeatherStation;
+package org.example.weatherstation;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.json.JSONPropertyName;
 
 import java.io.Serializable;
 
@@ -12,11 +14,19 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+
+
 public class WeatherStatusMsg implements Serializable {
+
+    @JsonProperty("station_id")
     private int stationId;
+    @JsonProperty("s_no")
     private int sNo;
+    @JsonProperty("battery_status")
     private BatteryStatus batteryStatus;
+    @JsonProperty("status_timestamp")
     private Long statusTimestamp;
+    @JsonProperty("weather")
     private Weather weather;
 
     public String generateWeatherStatusMsg(Utilities utilities) {

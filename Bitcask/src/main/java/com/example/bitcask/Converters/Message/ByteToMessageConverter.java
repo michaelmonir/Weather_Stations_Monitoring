@@ -8,7 +8,7 @@ public class ByteToMessageConverter {
     ByteToDatatypeConverters reader;
 
     public ByteToMessageConverter(byte[] bytes) {
-        this.reader = new ByteToDatatypeConverters(bytes);
+        reader = new ByteToDatatypeConverters(bytes);
     }
 
     public Message convert() {
