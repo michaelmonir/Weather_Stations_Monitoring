@@ -26,9 +26,11 @@ public class MessageValidator {
             return schema.validate(jsonNode);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            // return an error message
+            return Set.of(new ValidationMessage.Builder()
+                            .customMessage("Invalid message: " + e.getMessage())
+                    .build());
         }
-        return null;
     }
 
     private void processValidMessage(JsonNode jsonNode) {

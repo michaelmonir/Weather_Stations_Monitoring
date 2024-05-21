@@ -63,18 +63,17 @@ public class RunningDetector {
                                 return null;
                             }
 
-                            return String.format("""
-                                    {
-                                        "message": "Rain alert",
-                                        "station_id": %d,
-                                        "s_no": %d,
-                                        "battery_status": "%s",
-                                        "timestamp": %d,
-                                        "humidity": %s
-                                    }
-                                    """, stationId, sNo, batteryStatus, timestamp, humidity);
+                            String format = String.format("{\n" +
+                                    "    \"message\": \"Rain alert\",\n" +
+                                    "    \"station_id\": %d,\n" +
+                                    "    \"s_no\": %d,\n" +
+                                    "    \"battery_status\": \"%s\",\n" +
+                                    "    \"timestamp\": %d,\n" +
+                                    "    \"humidity\": %s\n" +
+                                    "}", stationId, sNo, batteryStatus, timestamp, humidity);
+                            return format;
                         }
-                        )
+                )
                 .peek((key, value) -> System.out.println("Rain alert: " + value))
                 .filter((key, value) -> value != null)
                 .to(outputTopic, Produced.with(stringSerde, stringSerde));

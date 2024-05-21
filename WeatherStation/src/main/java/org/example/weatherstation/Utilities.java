@@ -1,6 +1,7 @@
-package org.example.WeatherStation;
+package org.example.weatherstation;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 import java.util.Random;
@@ -11,13 +12,13 @@ public class Utilities {
     private final Random random = new Random();
     private final AtomicInteger sequenceNumber = new AtomicInteger(0);
     public String changeMsgToJson(WeatherStatusMsg weatherStatusMsg) {
-        return gson.toJson(weatherStatusMsg);
+        return new ObjectMapper().valueToTree(weatherStatusMsg).toString();
     }
     public BatteryStatus generateBatteryStatus() {
         double rand = Math.random();
-        if (rand < 0.3) return BatteryStatus.LOW;
-        if (rand < 0.7) return BatteryStatus.MEDIUM;
-        return BatteryStatus.HIGH;
+        if (rand < 0.3) return BatteryStatus.low;
+        if (rand < 0.7) return BatteryStatus.medium;
+        return BatteryStatus.high;
     }
     public int getRandomStationId() {
         return random.nextInt(10) + 1;

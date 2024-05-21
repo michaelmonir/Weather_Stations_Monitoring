@@ -9,7 +9,7 @@ import java.util.Properties;
 public class Producer {
 
     private static final String BOOTSTRAP_SERVERS = "localhost:9092";
-    private static final String TOPIC_NAME = "BaseCentralStation";
+    private static final String TOPIC_NAME = "weather-station";
     private final KafkaProducer<String, String> producer;
 
     public Producer() {

@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
-    <file url="file://$PROJECT_DIR$/WeatherStationSpring/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Base-Station/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Base-Station/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Bitcask/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/KafkaProcessor/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/KafkaProcessor/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/WeatherStation/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/WeatherStation/src/main/resources" charset="UTF-8" />
   </component>
 </project>

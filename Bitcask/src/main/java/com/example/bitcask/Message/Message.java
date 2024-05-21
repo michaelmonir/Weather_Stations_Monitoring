@@ -9,7 +9,7 @@ public class Message {
 
     private Long station_id;
     private Long s_no;
-    private short battery_status; // low: 0, medium: 1, high: 2
+    private short battery_status;
     private Long status_timestamp;
     private int humidity;
     private int temperature;
