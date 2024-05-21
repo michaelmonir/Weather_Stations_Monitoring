@@ -34,6 +34,10 @@ public class BitcaskRunner {
         Bitcask.getBitcask().write(message);
     }
 
+    public static void put(Message message) {
+        Bitcask.getBitcask().write(message);
+    }
+
     public static Message read(long key) {
         return Bitcask.getBitcask().read(key);
     }
