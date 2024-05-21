@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weatherstation-deployment
+  labels:
+    app: weatherstation
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: weatherstation
+  template:
+    metadata:
+      labels:
+        app: weatherstation
+    spec:
+      containers:
+        - name: weatherstation
+          image: weatherstation:latest
+          ports:
+            - containerPort: 8081
+          env:
+            - name: MOODFLAG
+              valueFrom:
+                configMapKeyRef:
+                  name: weatherstation-env
+                  key: MOODFLAG
+            - name: STATION_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: weatherstation-env
+                  key: STATION_ID
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: weatherstation-env
+data:
+  MOODFLAG: "1"
+  STATION_ID: "123"

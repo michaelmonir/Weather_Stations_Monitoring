@@ -9,10 +9,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Utilities {
     private final Gson gson = new Gson();
+    private int stationId;
     private final Random random = new Random();
     private final AtomicInteger sequenceNumber = new AtomicInteger(0);
     public String changeMsgToJson(WeatherStatusMsg weatherStatusMsg) {
         return new ObjectMapper().valueToTree(weatherStatusMsg).toString();
+    }
+
+    public Utilities(int stationId) {
+        this.stationId = stationId;
     }
     public BatteryStatus generateBatteryStatus() {
         double rand = Math.random();
@@ -21,7 +26,7 @@ public class Utilities {
         return BatteryStatus.high;
     }
     public int getRandomStationId() {
-        return random.nextInt(10) + 1;
+        return this.stationId;
     }
 
     public int getNextSequenceNumber() {

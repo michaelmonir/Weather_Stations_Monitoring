@@ -22,7 +22,7 @@ public class OpenMeteoWeatherStation {
 
     public OpenMeteoWeatherStation() {
         this.httpClient = HttpClient.newHttpClient();
-        this.utilities = new Utilities();
+        this.utilities = new Utilities(0);
         this.producer = new Producer();
     }
 
