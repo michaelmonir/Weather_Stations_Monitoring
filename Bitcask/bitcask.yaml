@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bitcask-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bitcask
+  template:
+    metadata:
+      labels:
+        app: bitcask
+    spec:
+      containers:
+        - name: bitcask
+          image: michaelmonir2/micrepository:bitcask2
+          ports:
+            - containerPort: 8080
+            - containerPort: 12345
+          env:
+            - name: PORT
+              value: "12345"
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: bitcask-service
+spec:
+  selector:
+    app: bitcask
+  ports:
+    - name: http
+      protocol: TCP
+      port: 85
+      targetPort: 8080
+    - name: bitcask
+      protocol: TCP
+      port: 82
+      targetPort: 12345
+  type: ClusterIP
+
+
